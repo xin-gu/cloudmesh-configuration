@@ -19,7 +19,7 @@ import pytest
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common3.StopWatch import StopWatch
 from cloudmesh.config import Config
 
 
@@ -49,17 +49,17 @@ class TestConfig:
     def test_search(self):
         config = Config()
 
-        Benchmark.Start()
+        StopWatch.start("search")
         r = config.search("cloudmesh.cloud.*.cm.active", True)
-        Benchmark.Stop()
+        StopWatch.stop("search")
         pprint (r)
 
     def test_dict(self):
         HEADING()
         config = Config()
-        Benchmark.Start()
+        StopWatch.start("dict")
         result = config.dict()
-        Benchmark.Stop()
+        StopWatch.stop("dict")
         pprint(result)
         print(config)
         print(type(config.data))
@@ -69,9 +69,9 @@ class TestConfig:
     def test_config_subscriptable(self):
         HEADING()
         config = Config()
-        Benchmark.Start()
+        StopWatch.start("config_subscriptable")
         data = config["cloudmesh"]["data"]["mongo"]
-        Benchmark.Stop()
+        StopWatch.stop("config_subscriptable")
         assert data is not None
 
     def test_dictreplace(self):
@@ -94,9 +94,9 @@ class TestConfig:
         # spec = spec.replace("}", "}}")
 
         # print(spec)
-        Benchmark.Start()
+        StopWatch.start("dictreplace")
         result = config.spec_replace(spec)
-        Benchmark.Stop()
+        StopWatch.stop("dictreplace")
         print(result)
         data = yaml.load(result, Loader=yaml.SafeLoader)
         pprint(data)
@@ -116,10 +116,10 @@ class TestConfig:
         assert os.path.isfile(Path(filename))
 
     def test_set(self):
-        Benchmark.Start()
+        StopWatch.start("set")
         config = Config()
         config["cloudmesh.test.nested"] = "Gregor"
-        Benchmark.Stop()
+        StopWatch.stop("set")
         print(config["cloudmesh.test.nested"])
         assert config["cloudmesh.test.nested"] == "Gregor"
 
@@ -130,5 +130,5 @@ class TestConfig:
         assert config["cloudmesh.test.nested"] != "Gregor"
     '''
 
-    def test_benchmark(self):
-        Benchmark.print(sysinfo=False)
+    def test_StopWatch(self):
+        StopWatch.print(sysinfo=False)
