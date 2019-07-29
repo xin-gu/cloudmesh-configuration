@@ -29,21 +29,21 @@ class TestConfig:
 
     def config_n_load(self, n):
         config = [None] * n
-        StopWatch.start(f"test_config_load n={n}")
+        StopWatch.start("test_config_load n={n}".format(**locals()))
         for i in range(1, n):
             config[i] = Config()
-        StopWatch.stop(f"test_config_load n={n}")
+        StopWatch.stop("test_config_load n={n}".format(**locals()))
 
     def test_config(self):
         print ()
         for n in range(1, 10):
             self.config_n_load(n)
-            n_1 = StopWatch.get(f"test_config_load n=1")
-            n_n = StopWatch.get(f"test_config_load n={n}")
+            n_1 = StopWatch.get("test_config_load n=1")
+            n_n = StopWatch.get("test_config_load n={n}".format(**locals()))
             print (n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
 
-        n_1 = StopWatch.get(f"test_config_load n=1")
-        n_n = StopWatch.get(f"test_config_load n=9")
+        n_1 = StopWatch.get("test_config_load n=1")
+        n_n = StopWatch.get("test_config_load n=9")
         assert (n_1 * 9 >= n_n)
 
     def test_search(self):
