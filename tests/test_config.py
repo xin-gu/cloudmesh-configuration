@@ -131,4 +131,4 @@ class TestConfig:
     '''
 
     def test_StopWatch(self):
-        StopWatch.print(sysinfo=False)
+        StopWatch.benchmark(sysinfo=False)
