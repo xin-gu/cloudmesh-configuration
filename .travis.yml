@@ -18,7 +18,8 @@ install:
   - pip install --user .
 
 script:
-  - pytest -v --capture=no tests/test_stopwatch.py
+  - pytest -v --capture=no tests/test_config.py
+  - pytest -v --capture=no tests/test_configdict.py
 
 # remove the verbose test as it does not work in python 2.7
 #  - pytest -v tests/test_verbose.py

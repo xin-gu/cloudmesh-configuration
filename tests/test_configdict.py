@@ -12,7 +12,7 @@ from __future__ import print_function
 
 import os
 
-from cloudmesh.common.ConfigDict import ConfigDict
+from cloudmesh.config.v2.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
 import pytest
 
