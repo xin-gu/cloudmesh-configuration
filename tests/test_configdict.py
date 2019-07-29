@@ -9,7 +9,7 @@ import pytest
 from cloudmesh.common.util import HEADING
 
 import os
-from cloudmesh.config import Config
+from cloudmesh.config.config import Config
 
 @pytest.mark.incremental
 class Test_configdict:

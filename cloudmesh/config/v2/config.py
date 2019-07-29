@@ -19,6 +19,9 @@ class Config(object):
     def credentials(self, name):
         return dotdict(self.cloud(name)["credentials"])
 
+class Active(object):
+    def __init__(self):
+        pass
 
 '''
 if __name__ == "__main__":
