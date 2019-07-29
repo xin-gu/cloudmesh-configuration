@@ -3,7 +3,12 @@ import shutil
 import sys
 from os import mkdir
 from os.path import isfile, join, dirname, realpath, exists
-from pathlib import Path
+
+try:
+    from pathlib import Path
+except:
+    from pathlib2 import Path
+
 from shutil import copyfile
 
 import munch
@@ -18,6 +23,7 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
+
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
@@ -60,8 +66,8 @@ class Config(object):
     def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """
         loads a configuration file
-        :param path:
-        :type path:
+        :param config_path:
+        :type config_path:
         :return:
         :rtype:
         """
@@ -106,7 +112,8 @@ class Config(object):
 
     def create(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """
-        creates the cloudmesh4.yaml file in the specified location. The default is
+        creates the cloudmesh4.yaml file in the specified location. The
+        default is
 
             ~/.cloudmesh/cloudmesh4.yaml
 
@@ -137,11 +144,11 @@ class Config(object):
 
             d = Variables()
             if defaults is not None:
-                print(f"# Set default from yaml file:")
+                print("# Set default from yaml file:")
 
             for key in defaults:
                 value = defaults[key]
-                print(f"set {key}={value}")
+                print("set {key}={value}".format(**locals()))
                 d[key] = defaults[key]
 
     @staticmethod
@@ -178,7 +185,6 @@ class Config(object):
             Console.error("Could not execute yamllint. Please add with")
             Console.error("pip install yamllint")
 
-
     @staticmethod
     def check_for_tabs(filename, verbose=True):
         """identifies if the file contains tabs and returns True if it
@@ -203,9 +209,10 @@ class Config(object):
                 location = [
                     i for i in range(len(line)) if line.startswith('\t', i)]
                 if verbose:
-                    Console.error(f"Tab found in line {line_no} "
-                                  f"and column(s) {location}")
-            line_no += 1
+                    Console.error(
+                        "Tab found in line {line_no} and column(s) {location}"\
+                            .format(**locals()))
+                    line_no += 1
         return file_contains_tabs
 
     def save(self, path="~/.cloudmesh/cloudmesh4.yaml", backup=True):
@@ -242,7 +249,7 @@ class Config(object):
             for variable in variables:
                 text = variable
                 variable = variable[1:-1]
-                value = eval(f"m.{variable}")
+                value = eval("m.{variable}".format(**locals()))
                 if "{" not in value:
                     spec = spec.replace(text, value)
         return spec
@@ -258,12 +265,12 @@ class Config(object):
 
     def check_for_TBD(self, kind, name):
 
-        configuration = Config()[f"cloudmesh.{kind}.{name}"]
+        configuration = Config()["cloudmesh.{kind}.{name}".format(**locals())]
 
         result = {"cloudmesh": {"cloud": {name: configuration}}}
 
-        banner(
-            f"checking cloudmesh.{kind}.{name} in ~/.cloudmesh/cloudmesh4.yaml file")
+        banner("checking cloudmesh.{kind}.{name} in "
+            "~/.cloudmesh/cloudmesh4.yaml file".format(**locals()))
 
         print(yaml.dump(result))
 
@@ -272,7 +279,8 @@ class Config(object):
         for attribute in flat:
             if "TBD" in str(flat[attribute]):
                 Console.error(
-                    f"~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD")
+                    "~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD".format(
+                        **locals()))
 
     def set_debug_defaults(self):
         for name in ["trace", "debug"]:
@@ -285,12 +293,11 @@ class Config(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
-
     @staticmethod
     def cat_lines(content,
-        mask_secrets=True,
-        attributes=None,
-        color=None):
+                  mask_secrets=True,
+                  attributes=None,
+                  color=None):
 
         colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
         if color:
@@ -341,10 +348,8 @@ class Config(object):
         with open(_path) as f:
             content = f.read().split("\n")
         return Config.cat_lines(content,
-                               mask_secrets=mask_secrets,
-                               attributes=None,color=None)
-
-
+                                mask_secrets=mask_secrets,
+                                attributes=None, color=None)
 
     def get(self, key, default=None):
         """
@@ -364,7 +369,8 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{key}' could not be found in the yaml file '{path}'")
+                "The key '{key}' could not be found in the yaml file '{path}'".format(
+                    **locals()))
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -409,7 +415,8 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{key}' could not be found in the yaml file '{path}'")
+                "The key '{key}' could not be found in the yaml file '{path}'".format(
+                    **locals()))
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -461,12 +468,13 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{item}' could not be found in the yaml file '{path}'")
+                "The key '{item}' could not be found in the yaml file '{path}'".format(
+                    **locals()))
             sys.exit(1)
         except Exception as e:
             print(e)
             sys.exit(1)
-        #if element.lower() in ['true', 'false']:
+        # if element.lower() in ['true', 'false']:
         #    element = element.lower() == 'true'
         return element
 
@@ -494,12 +502,12 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{item}' could not be found in the yaml file '{path}'")
+                "The key '{item}' could not be found in the yaml file '{path}'".format(
+                    **locals()))
             sys.exit(1)
         except Exception as e:
             print(e)
             sys.exit(1)
-
 
     def search(self, key, value):
         """
@@ -512,8 +520,6 @@ class Config(object):
         result = flat.search(key, value)
         return result
 
-
-
     def edit(self, attribute):
         """
         edits the dict specified by the attribute and fills out all TBD values.
@@ -522,26 +528,28 @@ class Config(object):
         :return:
         """
 
-        Console.ok(f"Filling out: {attribute}")
+        Console.ok("Filling out: {attribute}".format(attribute=attribute))
 
         try:
             config = Config()
             values = config[attribute]
 
-            print(f"Editing the values for {attribute}")
+            print("Editing the values for {attribute}"\
+                .format(attribute=attribute))
 
             print("Current Values:")
 
             print(yaml.dump(values, indent=2))
 
             for key in values:
-
                 if values[key] == "TBD":
-                    result = input(f"Please enter new value for {key}: ")
+                    result = input("Please enter new value for {key}: "\
+                            .format(**locals()))
                     values[key] = result
 
             config.save()
         except Exception as e:
             print(e)
             Console.error(
-                f"could not find the attribute '{attribute}' in the yaml file.")
+                "could not find the attribute '{attribute}' in the yaml file."\
+                    .format(**locals()))
