@@ -20,7 +20,7 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.config import Config
+from cloudmesh.config.config import Config
 
 
 @pytest.mark.incremental
