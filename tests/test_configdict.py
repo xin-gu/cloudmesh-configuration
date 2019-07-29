@@ -3,18 +3,13 @@
 # pytest -v --capture=no tests/test_configdictr.py
 # pytest -v  tests/test_configdict.py
 ###############################################################
-import six
-if six.PY3:
-    print(" We are not running python 2 tests in python 3")
-    assert True
-
 from __future__ import print_function
 
-import os
-
-from cloudmesh.config.v2.ConfigDict import ConfigDict
-from cloudmesh.common.util import HEADING
 import pytest
+from cloudmesh.common.util import HEADING
+
+import os
+from cloudmesh.config import Config
 
 @pytest.mark.incremental
 class Test_configdict:
@@ -25,7 +20,7 @@ class Test_configdict:
 
     def test_001_read(self):
         HEADING("test if cloudmesh.yaml is loaded")
-        d = ConfigDict("cloudmesh.yaml",
+        d = Config("cloudmesh.yaml",
                        verbose=True)
 
         assert d["cloudmesh"]["profile"]["firstname"] != ""
@@ -78,7 +73,7 @@ class Test_configdict:
     def test_004_yaml(self):
 
         HEADING("test if yaml is produced")
-        d = ConfigDict("cloudmesh.yaml",
+        d = Config("cloudmesh.yaml",
                        verbose=True)
         result = d.yaml
 
