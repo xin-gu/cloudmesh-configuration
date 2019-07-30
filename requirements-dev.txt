@@ -5,4 +5,3 @@ bump2version
 pytest-cov
 pip-tools
 pipdeptree
-tox
