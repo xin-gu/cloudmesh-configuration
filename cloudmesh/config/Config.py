@@ -128,14 +128,23 @@ class Config(object):
         :type config_path: string
         """
         self.config_path = Path(path_expand(config_path)).resolve()
+        print ("AAAA", self.config_path)
+
         self.config_folder = dirname(self.config_path)
+
+        print ("BBB", self.config_folder)
+
 
         if not exists(self.config_folder):
             mkdir(self.config_folder)
 
+        print ("CCC", dirname(realpath(__file__)))
+
         if not isfile(self.config_path):
-            source = Path(join(dirname(realpath(__file__)),
-                               "/etc/cloudmesh.yaml"))
+            source = Path(dirname(realpath(__file__)) + "/etc/cloudmesh.yaml")
+
+            print("BBB", source)
+
             copyfile(source.resolve(), self.config_path)
 
             # read defaults
