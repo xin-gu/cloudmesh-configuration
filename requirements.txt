@@ -9,3 +9,4 @@ future==0.17.1
 munch==2.3.2
 pathlib2==2.3.4
 pathlib==1.0.1
+six
