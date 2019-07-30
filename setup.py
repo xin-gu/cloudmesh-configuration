@@ -31,10 +31,7 @@ def readfile(filename):
 
 requiers = """
 pathlib
-pathlib2
-future
 munch
-six
 cloudmesh-common
 """.split("\n")
 
