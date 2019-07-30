@@ -29,7 +29,7 @@ from cloudmesh.common.FlatDict import FlatDict
 
 class Active(object):
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def __init__(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         self.config = Config(config_path=config_path)
 
     def clouds(self):
@@ -46,13 +46,13 @@ class Active(object):
 class Config(object):
     __shared_state = {}
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml',
+    def __init__(self, config_path='~/.cloudmesh/cloudmesh.yaml',
                  encrypted=False):
         """
         Initialize the Config class.
 
         :param config_path: A local file path to cloudmesh yaml config
-            with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
+            with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh.yaml`
         """
 
         self.__dict__ = self.__shared_state
@@ -63,7 +63,7 @@ class Config(object):
             except:
                 pass
 
-    def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def load(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         """
         loads a configuration file
         :param config_path:
@@ -90,7 +90,7 @@ class Config(object):
 
         if self.data is None:
             raise EnvironmentError(
-                "Failed to load configuration file cloudmesh4.yaml, "
+                "Failed to load configuration file cloudmesh.yaml, "
                 "please check the path and file locally")
 
         #
@@ -110,12 +110,12 @@ class Config(object):
         else:
             self.cloud = None
 
-    def create(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def create(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         """
-        creates the cloudmesh4.yaml file in the specified location. The
+        creates the cloudmesh.yaml file in the specified location. The
         default is
 
-            ~/.cloudmesh/cloudmesh4.yaml
+            ~/.cloudmesh/cloudmesh.yaml
 
         If the file does not exist, it is initialized with a default. You still
         need to edit the file.
@@ -131,7 +131,7 @@ class Config(object):
 
         if not isfile(self.config_path):
             source = Path(join(dirname(realpath(__file__)),
-                               "../../etc/cloudmesh4.yaml"))
+                               "../../etc/cloudmesh.yaml"))
 
             copyfile(source.resolve(), self.config_path)
 
@@ -152,7 +152,7 @@ class Config(object):
                 d[key] = defaults[key]
 
     @staticmethod
-    def check(path="~/.cloudmesh/cloudmesh4.yaml"):
+    def check(path="~/.cloudmesh/cloudmesh.yaml"):
 
         error = False
         path = path_expand(path)
@@ -215,7 +215,7 @@ class Config(object):
                     line_no += 1
         return file_contains_tabs
 
-    def save(self, path="~/.cloudmesh/cloudmesh4.yaml", backup=True):
+    def save(self, path="~/.cloudmesh/cloudmesh.yaml", backup=True):
         """
         #
         # not tested
@@ -270,7 +270,7 @@ class Config(object):
         result = {"cloudmesh": {"cloud": {name: configuration}}}
 
         banner("checking cloudmesh.{kind}.{name} in "
-            "~/.cloudmesh/cloudmesh4.yaml file".format(**locals()))
+            "~/.cloudmesh/cloudmesh.yaml file".format(**locals()))
 
         print(yaml.dump(result))
 
@@ -279,7 +279,7 @@ class Config(object):
         for attribute in flat:
             if "TBD" in str(flat[attribute]):
                 Console.error(
-                    "~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD".format(
+                    "~/.cloudmesh.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD".format(
                         **locals()))
 
     def set_debug_defaults(self):
@@ -341,10 +341,10 @@ class Config(object):
     @staticmethod
     def cat(mask_secrets=True,
             attributes=None,
-            path="~/.cloudmesh/cloudmesh4.yaml",
+            path="~/.cloudmesh/cloudmesh.yaml",
             color=None):
 
-        _path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        _path = path_expand("~/.cloudmesh/cloudmesh.yaml")
         with open(_path) as f:
             content = f.read().split("\n")
         return Config.cat_lines(content,

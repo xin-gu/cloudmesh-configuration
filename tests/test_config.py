@@ -112,7 +112,7 @@ class TestConfig:
     def test_if_yaml_file_exists(self):
         config = Config()
         config.create()
-        filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        filename = path_expand("~/.cloudmesh/cloudmesh.yaml")
         assert os.path.isfile(Path(filename))
 
     def test_set(self):
