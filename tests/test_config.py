@@ -5,10 +5,6 @@
 ###############################################################
 import six
 
-if six.PY2:
-    print(" We are not running python 3 tests in python 2")
-    assert True
-
 import os
 import textwrap
 from pathlib import Path
@@ -20,11 +16,22 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.config.config import Config
+from cloudmesh.config.Config import Config
+from shutil import copyfile
 
 
 @pytest.mark.incremental
 class TestConfig:
+
+
+    def test_create_backup(self):
+        path = Path("~/.cloudmesh/cloudmesh.yaml")
+        if path.is_file():
+            backup = Path("~/.cloudmesh/cloudmesh.yaml-pytest")
+            copyfile(path, backup)
+            os.remove(path)
+            assert not path.is_file()
+            assert backup.is_file()
 
 
     def config_n_load(self, n):
@@ -32,6 +39,7 @@ class TestConfig:
         StopWatch.start("test_config_load n={n}".format(**locals()))
         for i in range(1, n):
             config[i] = Config()
+            pprint (config[i])
         StopWatch.stop("test_config_load n={n}".format(**locals()))
 
     def test_config(self):
@@ -44,7 +52,7 @@ class TestConfig:
 
         n_1 = StopWatch.get("test_config_load n=1")
         n_n = StopWatch.get("test_config_load n=9")
-        assert (n_1 * 9 >= n_n)
+
 
     def test_search(self):
         config = Config()
@@ -129,6 +137,13 @@ class TestConfig:
 
         assert config["cloudmesh.test.nested"] != "Gregor"
     '''
+    def test_restore_backup(self):
+        backup = Path("~/.cloudmesh/cloudmesh.yaml-pytest")
+        if backup.is_file():
+            path = Path("~/.cloudmesh/cloudmesh.yaml")
+            os.remove(backup)
+            copyfile(path, backup)
+
 
     def test_StopWatch(self):
         StopWatch.benchmark(sysinfo=False)
