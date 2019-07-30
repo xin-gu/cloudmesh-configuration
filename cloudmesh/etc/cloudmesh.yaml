@@ -1,4 +1,5 @@
 cloudmesh:
+  version: "4.1.0"
   profile:
     firstname: TBD
     lastname: TBD
