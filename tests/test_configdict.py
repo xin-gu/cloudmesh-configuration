@@ -20,8 +20,7 @@ class Test_configdict:
 
     def test_001_read(self):
         HEADING("test if cloudmesh.yaml is loaded")
-        d = Config("cloudmesh.yaml",
-                       verbose=True)
+        d = Config("cloudmesh.yaml")
 
         assert d["cloudmesh"]["profile"]["firstname"] != ""
         assert len(d["cloudmesh"]["clouds"]) > 0
@@ -58,8 +57,7 @@ class Test_configdict:
         
     def test_003_json(self):
         HEADING("test if json is produced")
-        d = ConfigDict("cloudmesh.yaml",
-                       verbose=True)
+        d = Config("cloudmesh.yaml")
 
         assert d.json.startswith('{')
 
@@ -73,8 +71,7 @@ class Test_configdict:
     def test_004_yaml(self):
 
         HEADING("test if yaml is produced")
-        d = Config("cloudmesh.yaml",
-                       verbose=True)
+        d = Config("cloudmesh.yaml")
         result = d.yaml
 
         try:

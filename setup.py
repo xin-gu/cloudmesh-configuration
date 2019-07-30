@@ -33,6 +33,7 @@ requiers = """
 pathlib
 pathlib2
 future
+munch
 cloudmesh-common
 """.split("\n")
 
@@ -41,7 +42,7 @@ version = readfile("VERSION").strip()
 with open('README.md') as f:
     long_description = f.read()
 
-NAME = "cloudmesh-common"
+NAME = "cloudmesh-config"
 DESCRIPTION = "A set of useful APIs for cloudmesh"
 AUTHOR = "Gregor von Laszewski"
 AUTHOR_EMAIL = "laszewski@gmail.com"
