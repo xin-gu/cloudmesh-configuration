@@ -1,8 +1,9 @@
 import re
 import shutil
 import sys
+import os
 from os import mkdir
-from os.path import isfile, join, dirname, realpath, exists
+from os.path import isfile, join, realpath, exists
 import six
 
 try:
@@ -24,6 +25,13 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
+
+
+def dirname(path):
+    if six.PY3:
+        return os.path.dirname(path)
+    else:
+        return '/'.join(str(path).split('/')[:-1])
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
