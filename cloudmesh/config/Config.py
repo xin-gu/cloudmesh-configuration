@@ -3,13 +3,8 @@ import shutil
 import sys
 import os
 from os import mkdir
-from os.path import isfile, join, realpath, exists
-import six
-
-try:
-    from pathlib import Path
-except:
-    from pathlib2 import Path
+from os.path import isfile, join, realpath, exists, dirname
+from pathlib import Path
 
 from shutil import copyfile
 
@@ -26,12 +21,6 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
 
-
-def dirname(path):
-    if six.PY3:
-        return os.path.dirname(path)
-    else:
-        return '/'.join(str(path).split('/')[:-1])
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
@@ -83,10 +72,7 @@ class Config(object):
 
         # VERBOSE("Load config")
 
-        if six.PY2:
-            self.config_path = path_expand(config_path)
-        else:
-            self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_path = Path(path_expand(config_path)).resolve()
         self.config_folder = dirname(self.config_path)
 
         self.create(config_path=config_path)
@@ -135,27 +121,15 @@ class Config(object):
         :param config_path:  The yaml file to create
         :type config_path: string
         """
-        if six.PY2:
-            self.config_path = path_expand(config_path)
-        else:
-            self.config_path = Path(path_expand(config_path)).resolve()
-
-        print ("AAAA", self.config_path)
+        self.config_path = Path(path_expand(config_path)).resolve()
 
         self.config_folder = dirname(self.config_path)
-
-        print ("BBB", self.config_folder)
-
 
         if not exists(self.config_folder):
             mkdir(self.config_folder)
 
-        print ("CCC", dirname(realpath(__file__)))
-
         if not isfile(self.config_path):
             source = Path(dirname(realpath(__file__)) + "/etc/cloudmesh.yaml")
-
-            print("BBB", source)
 
             copyfile(source.resolve(), self.config_path)
 
