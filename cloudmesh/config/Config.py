@@ -129,16 +129,9 @@ class Config(object):
         if not exists(self.config_folder):
             mkdir(self.config_folder)
 
-        print ("CCCC", config_path, isfile(self.config_path))
-
         if not isfile(self.config_path):
-            print("DDD", config_path)
-
             source = Path(join(dirname(realpath(__file__)),
                                "/etc/cloudmesh.yaml"))
-
-            print ("COPY", source)
-
             copyfile(source.resolve(), self.config_path)
 
             # read defaults
