@@ -13,6 +13,7 @@ install:
   - python --version
   - pwd
   - pip install -r requirements.txt
+  - pip install .
   - mkdir ~/.cloudmesh
   - cp cloudmesh/config/etc/cloudmesh.yaml ~/.cloudmesh
 
