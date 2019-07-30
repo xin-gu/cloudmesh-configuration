@@ -3,6 +3,7 @@ import shutil
 import sys
 from os import mkdir
 from os.path import isfile, join, dirname, realpath, exists
+import six
 
 try:
     from pathlib import Path
@@ -74,7 +75,10 @@ class Config(object):
 
         # VERBOSE("Load config")
 
-        self.config_path = Path(path_expand(config_path)).resolve()
+        if six.PY2:
+            self.config_path = path_expand(config_path)
+        else:
+            self.config_path = Path(path_expand(config_path)).resolve()
         self.config_folder = dirname(self.config_path)
 
         self.create(config_path=config_path)
