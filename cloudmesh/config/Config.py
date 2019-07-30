@@ -135,7 +135,11 @@ class Config(object):
         :param config_path:  The yaml file to create
         :type config_path: string
         """
-        self.config_path = Path(path_expand(config_path)).resolve()
+        if six.PY2:
+            self.config_path = path_expand(config_path)
+        else:
+            self.config_path = Path(path_expand(config_path)).resolve()
+
         print ("AAAA", self.config_path)
 
         self.config_folder = dirname(self.config_path)
