@@ -171,7 +171,7 @@ class Config(object):
             options = \
                 '-f colored ' \
                 '-d "{extends: relaxed, ""rules: {line-length: {max: 256}}}"'
-            r = Shell.live(f'yamllint {options} {path}')
+            r = Shell.live('yamllint {options} {path}'.format(**locals()))
 
             if 'error' in r or 'warning' in r:
                 print(70 * '-')
