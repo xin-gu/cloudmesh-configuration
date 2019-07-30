@@ -72,7 +72,7 @@ class Config(object):
 
         # VERBOSE("Load config")
 
-        self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_path = str(Path(path_expand(config_path)).resolve())
         self.config_folder = dirname(self.config_path)
 
         self.create(config_path=config_path)
