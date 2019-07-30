@@ -16,7 +16,7 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 from shutil import copyfile
 
 
