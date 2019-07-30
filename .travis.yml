@@ -15,7 +15,7 @@ install:
   - pip install -r requirements.txt
   - pip install .
   - mkdir ~/.cloudmesh
-  - cp cloudmesh/config/etc/cloudmesh.yaml ~/.cloudmesh
+  - cp cloudmesh/configuration/etc/cloudmesh.yaml ~/.cloudmesh
 
 script:
   - pytest -v --capture=no tests/test_config.py
