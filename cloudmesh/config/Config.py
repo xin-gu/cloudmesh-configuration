@@ -135,7 +135,7 @@ class Config(object):
             print("DDD", config_path)
 
             source = Path(join(dirname(realpath(__file__)),
-                               "../etc/cloudmesh.yaml"))
+                               "/etc/cloudmesh.yaml"))
 
             print ("COPY", source)
 
