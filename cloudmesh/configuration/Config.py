@@ -61,6 +61,19 @@ class Config(object):
             except:
                 pass
 
+        self.secrets = [
+            "AZURE_SUBSCRIPTION_ID",
+            "AZURE_TENANTID",
+            "EC2_ACCESS_ID",
+            "EC2_SECRET_KEY",
+            "AZURE_SECRET_KEY",
+            "OS_PASSWORD",
+            "OS_USERNAME",
+            "OS_PROJECT_ID",
+            "MONGO_PASSWORD",
+            "MONGO_USERNAME"
+        ]
+
     def load(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         """
         loads a configuration file
@@ -292,16 +305,8 @@ class Config(object):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
     @staticmethod
-    def cat_lines(content,
-                  mask_secrets=True,
-                  attributes=None,
-                  color=None):
-
-        colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
-        if color:
-            colors = colors + color
-
-        secrets = [
+    def secrets():
+        return [
             "AZURE_SUBSCRIPTION_ID",
             "AZURE_TENANTID",
             "EC2_ACCESS_ID",
@@ -313,6 +318,18 @@ class Config(object):
             "MONGO_PASSWORD",
             "MONGO_USERNAME"
         ]
+
+    @staticmethod
+    def cat_lines(content,
+                  mask_secrets=True,
+                  attributes=None,
+                  color=None):
+
+        colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+        if color:
+            colors = colors + color
+
+        secrets = Config.secrets()
 
         if attributes:
             secrets = secrets + attributes
