@@ -293,7 +293,7 @@ cloudmesh:
         OS_PROJECT_NAME: CH-819337
         OS_PROJECT_DOMAIN_ID: default
         OS_USER_DOMAIN_ID: default
-        OS_VERSION: liberty
+        OS_VERSION: kilo
         OS_REGION_NAME: RegionOne
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
