@@ -41,10 +41,10 @@ with open('README.md') as f:
     long_description = f.read()
 
 NAME = "cloudmesh-configuration"
-DESCRIPTION = "A set of useful APIs for cloudmesh"
+DESCRIPTION = "A simple way to configure applications from yaml files."
 AUTHOR = "Gregor von Laszewski"
 AUTHOR_EMAIL = "laszewski@gmail.com"
-URL = "https://github.com/cloudmesh/cloudmesh-common"
+URL = "https://github.com/cloudmesh/cloudmesh-configuration"
 
 setup(
     name=NAME,

@@ -297,7 +297,7 @@ cloudmesh:
         OS_REGION_NAME: RegionOne
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
-        flavor: m1.small
+        size: m1.small
         image: CC-Ubuntu18.04
         username: cc
     jetstream:
@@ -322,7 +322,7 @@ cloudmesh:
         OS_INTERFACE: public
         OS_REGION_NAME: RegionOne
       default:
-        flavor: m1.small
+        size: m1.small
         image: Ubuntu-Server-14.04-LTS
     cybera-e:
       cm:
@@ -342,7 +342,7 @@ cloudmesh:
         OS_PASSWORD: TBD
         OS_REGION_NAME: Edmonton
       default:
-        flavor: m1.small
+        size: m1.small
         image: Ubuntu 14.04
     vagrant:
       credentials:
