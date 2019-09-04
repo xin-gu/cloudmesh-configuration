@@ -10,17 +10,17 @@ from shutil import copyfile
 
 import munch
 import oyaml as yaml
+# import yaml
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import backup_name
 from cloudmesh.common.util import banner
-# from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
-
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
@@ -95,6 +95,8 @@ class Config(object):
             content = path_expand(content)
             content = self.spec_replace(content)
             self.data = yaml.load(content, Loader=yaml.SafeLoader)
+
+        # print (self.data["cloudmesh"].keys())
 
         # self.data is loaded as nested OrderedDict, can not use set or get
         # methods directly
