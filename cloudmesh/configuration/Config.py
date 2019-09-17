@@ -19,8 +19,10 @@ from cloudmesh.common.util import backup_name
 from cloudmesh.common.util import banner
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import writefile
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
+import requests
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
@@ -73,6 +75,33 @@ class Config(object):
             "MONGO_PASSWORD",
             "MONGO_USERNAME"
         ]
+
+
+    def fetch(self,
+              url=None,
+              destination=None):
+        """
+
+        fetches the cloudmesh yaml file and places it in the given destination dir
+
+        :param url: The url of the cloudmesh.yaml file from github
+        :param destionation: The destination file. If not specified it is the home dir.
+        :return:
+        """
+        if url is None:
+            url = "https://raw.githubusercontent.com/cloudmesh/cloudmesh-configuration/master/cloudmesh/configuration/etc/cloudmesh.yaml"
+        if destination is None:
+            destination = "~/.cloudmesh/cloudmesh.yaml"
+
+        destination = path_expand(destination)
+
+        Shell.mkdir("~/.cloudmesh")
+
+
+        r = requests.get(url)
+        content = r.text
+
+        writefile(destination, content)
 
     def load(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         """
