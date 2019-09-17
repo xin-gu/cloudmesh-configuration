@@ -299,7 +299,7 @@ cloudmesh:
         OS_REGION_NAME: RegionOne
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
-        size: m1.small
+        size: m1.medium
         image: CC-Ubuntu18.04
         username: cc
     jetstream:
