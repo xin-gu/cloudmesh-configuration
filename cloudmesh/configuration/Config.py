@@ -121,7 +121,7 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             content = stream.read()
-            content = path_expand(content)
+            # content = path_expand(content)
             content = self.spec_replace(content)
             self.data = yaml.load(content, Loader=yaml.SafeLoader)
 
