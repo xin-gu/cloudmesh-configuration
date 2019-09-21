@@ -63,18 +63,24 @@ class Config(object):
             except:
                 pass
 
-        self.secrets = [
-            "AZURE_SUBSCRIPTION_ID",
-            "AZURE_TENANTID",
-            "EC2_ACCESS_ID",
-            "EC2_SECRET_KEY",
-            "AZURE_SECRET_KEY",
-            "OS_PASSWORD",
-            "OS_USERNAME",
-            "OS_PROJECT_ID",
-            "MONGO_PASSWORD",
-            "MONGO_USERNAME"
-        ]
+    @staticmethod
+    def secrets():
+
+        return [
+                "AZURE_SUBSCRIPTION_ID",
+                "AZURE_TENANTID",
+                "AZURE_APPLICATION_ID",
+                "AZURE_SECRET_KEY",
+                "EC2_ACCESS_ID",
+                "EC2_SECRET_KEY",
+                "OS_PASSWORD",
+                "OS_USERNAME",
+                "OS_PROJECT_ID",
+                "MONGO_PASSWORD",
+                "MONGO_USERNAME",
+                "password",
+                "passwd"
+                ]
 
 
     def fetch(self,
@@ -335,20 +341,6 @@ class Config(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
-    @staticmethod
-    def secrets():
-        return [
-            "AZURE_SUBSCRIPTION_ID",
-            "AZURE_TENANTID",
-            "EC2_ACCESS_ID",
-            "EC2_SECRET_KEY",
-            "AZURE_SECRET_KEY",
-            "OS_PASSWORD",
-            "OS_USERNAME",
-            "OS_PROJECT_ID",
-            "MONGO_PASSWORD",
-            "MONGO_USERNAME"
-        ]
 
     @staticmethod
     def cat_lines(content,

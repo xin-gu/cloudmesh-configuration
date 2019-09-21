@@ -283,7 +283,7 @@ cloudmesh:
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
-        kind: vm
+        kind: openstack
         version: liberty
         service: compute
       credentials:
@@ -308,7 +308,7 @@ cloudmesh:
         heading: Jetstream
         host: http://jetstream-cloud.org/
         label: jetstream
-        kind: vm
+        kind: opensatck
         version: kilo
         service: compute
       credentials:
@@ -332,7 +332,7 @@ cloudmesh:
         heading: Cybera Edmonton OpenStack
         host: cybera
         label: kilo
-        kind: vm
+        kind: openstack
         version: kilo
         service: compute
       credentials:
