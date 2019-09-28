@@ -419,6 +419,7 @@ cloudmesh:
           MONGO_LOG: ~/.cloudmesh/mongodb/log
           MONGO_HOME: /var/lib/mongodb
         win32:
+          shell: cmd
           url: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi
           MONGO_PATH: '~\\.cloudmesh\\mongodb'
           MONGO_LOG: '~\\.cloudmesh\\mongodb\\log'
