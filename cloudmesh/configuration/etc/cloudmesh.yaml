@@ -422,7 +422,7 @@ cloudmesh:
           url: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi
           MONGO_PATH: ~\.cloudmesh\mongodb-data
           MONGO_LOG: ~\.cloudmesh\mongodb-data\log
-          MONGO_HOME: ~\.cloudmesh\mongodb
+          MONGO_HOME: ~\.cloudmesh\mongo
         redhat:
           url: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.10-1.el7.x86_64.rpm
           MONGO_PATH: ~/.cloudmesh/mongodb
