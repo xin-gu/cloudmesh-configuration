@@ -23,6 +23,8 @@ from cloudmesh.common.util import writefile
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
 import requests
+from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
+
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
@@ -62,6 +64,10 @@ class Config(object):
                 self.user = self["cloudmesh.profile.user"]
             except:
                 pass
+
+    @staticmethod
+    def version():
+        return cloudmesh_yaml_version
 
     @staticmethod
     def secrets():
@@ -204,6 +210,25 @@ class Config(object):
 
         error = False
         path = path_expand(path)
+
+        banner("Check for Version")
+
+        config = Config()
+
+        dist_version = config.version()
+        yaml_version = config["cloudmesh.version"]
+
+        if dist_version == yaml_version:
+            Console.ok(f"The version is {dist_version}")
+        else:
+            Console.error("Your version do not match")
+            print()
+            print("Found ~/.cloudmesh/cloudmesh.yaml:", yaml_version)
+            print("Please update to version         :", dist_version)
+            print("")
+            print("See also: ")
+            print()
+            print("  https://github.com/cloudmesh/cloudmesh-configuration/blob/master/cloudmesh/configuration/etc/cloudmesh.yaml")
 
         banner("Check for TAB Characters")
 
