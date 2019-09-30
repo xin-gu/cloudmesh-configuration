@@ -1,5 +1,5 @@
 cloudmesh:
-  version: "4.1.7"
+  version: "4.1.8"
   profile:
     firstname: TBD
     lastname: TBD
@@ -417,7 +417,7 @@ cloudmesh:
           url: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.10.tgz
           MONGO_PATH: ~/.cloudmesh/mongodb
           MONGO_LOG: ~/.cloudmesh/mongodb/log
-          MONGO_HOME: /var/lib/mongodb
+          MONGO_HOME: ~/local/mongo
         win32:
           url: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi
           MONGO_PATH: ~\.cloudmesh\mongodb-data
