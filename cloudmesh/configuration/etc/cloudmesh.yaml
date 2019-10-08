@@ -409,7 +409,7 @@ cloudmesh:
       MONGO_PASSWORD: TBD
       MONGO_DOWNLOAD:
         darwin:
-          url: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.10.tgz
+          url: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.12.tgz
           MONGO_PATH: ~/.cloudmesh/mongodb
           MONGO_LOG: ~/.cloudmesh/mongodb/log
           MONGO_HOME: ~/local/mongo
