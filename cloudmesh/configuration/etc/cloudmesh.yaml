@@ -81,7 +81,7 @@ cloudmesh:
         directory: /
       credentials:
         config_path: TBD
-    aws-myhome:
+    aws:
       cm:
         active: False
         heading: homedir
@@ -95,6 +95,10 @@ cloudmesh:
       credentials:
         name: TBD
         bucket: home
+        container: TBD
+        access_key_id: TBD
+        secret_access_key: TBD
+        region: TBD
     gdrive:
       cm:
         active: False
