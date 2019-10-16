@@ -51,11 +51,10 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      default:
-        directory: ~/a
       credentials:
-	    name: TBD
-	    key: ~/.ssh/id_rsa.pub
+        directory: ~/a
+        name: TBD
+        key: ~/.ssh/id_rsa.pub
     storage_b:
       cm:
         active: false
@@ -65,11 +64,10 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      default:
-        directory: ~/b
       credentials:
-	    name: TBD
-	    key: ~/.ssh/id_rsa.pub
+        directory: ~/b
+        name: TBD
+        key: ~/.ssh/id_rsa.pub
     box:
       cm:
         active: False
