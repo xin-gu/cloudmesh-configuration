@@ -44,30 +44,32 @@ cloudmesh:
   storage:
     storage_a:
       cm:
-        active: False
-        heading: Aws Boto
-        host: aws.com
-        label: aws_boto
-        kind: awsboto
+        active: false
+        heading: Storage A
+        host: localhost
+        label: local
+        kind: local
         version: TBD
         service: storage
       default:
-        directory: a
+        directory: ~/a
       credentials:
-        name: TBD
+	    name: TBD
+	    key: ~/.ssh/id_rsa.pub
     storage_b:
       cm:
-        active: False
-        heading: Aws Boto
-        host: aws.com
-        label: aws_libcloud
-        kind: awslibcloud
+        active: false
+        heading: Storage B
+        host: localhost
+        label: local
+        kind: local
         version: TBD
         service: storage
       default:
-        directory: b
+        directory: ~/b
       credentials:
-        name: TBD
+	    name: TBD
+	    key: ~/.ssh/id_rsa.pub
     box:
       cm:
         active: False
@@ -87,7 +89,7 @@ cloudmesh:
         heading: homedir
         host: aws.com
         label: home-dir
-        kind: aws-s3
+        kind: awss3
         version: TBD
         service: storage
       default:
