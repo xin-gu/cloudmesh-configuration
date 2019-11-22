@@ -1,5 +1,5 @@
 cloudmesh:
-  version: "4.1.9"
+  version: "4.1.10"
   profile:
     firstname: TBD
     lastname: TBD
@@ -7,6 +7,13 @@ cloudmesh:
     user: TBD
     github: TBD
     publickey: ~/.ssh/id_rsa.pub
+  security:
+    encryption: False
+    attributes:
+    - "cloudmesh.storage.gdrive.credentials.client_secret"
+    - "cloudmesh.storage.gdrive.credentials.auth_uri"
+    - "cloudmesh.storage.gdrive.credentials.token_uri"
+    - "*.token_uri"
   iu:
     user: TBD
   default:
@@ -51,8 +58,9 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      credentials:
+      default:
         directory: ~/a
+      credentials:
         name: TBD
         key: ~/.ssh/id_rsa.pub
     storage_b:
@@ -64,9 +72,10 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      credentials:
+      default:
         directory: ~/b
-        name: TBD
+      credentials:
+         name: TBD
         key: ~/.ssh/id_rsa.pub
     box:
       cm:
