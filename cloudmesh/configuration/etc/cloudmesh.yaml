@@ -141,6 +141,57 @@ cloudmesh:
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
         AZURE_REGION: 'northcentralus'
+    gcp:
+      cm:
+        active: false
+        heading: GCP
+        host: https://console.cloud.google.com/storage
+        label: gcp
+        kind: gcpbucket
+        version: TBD
+        service: storage
+      default:
+        directory: cloudmesh_gcp
+        Location_type: Region
+        Location: us-east1
+        Default_storage_class: Standard
+#      Nearline
+#      Coldline
+        Access_control: Uniform
+#       Fine-grained
+        Encryption: Google-managed
+#       Customer-managed key
+        Link_URL: https://console.cloud.google.com/storage/browser/cloudmesh_gcp
+        Link_for_gsutil: gs://cloudmesh_gcp
+      credentialsold:
+# https://cloud.google.com/storage/docs/reference/libraries
+# https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python
+        x-goog-project-id: 123451234512
+        service: service-123451234512@gs-project-accounts.iam.gserviceaccount.com
+        You: xxxxxx.......
+        Owners: xxxxx......
+        Editor: xxxxx......
+        Team: xxxxx......
+        uri: https://storage.googleapis.com
+        client_id: TBD
+        project_id: TBD
+        auth_uri: https://accounts.google.com/o/oauth2/auth
+        token_uri: TBD
+        client_secret: TBD
+        auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+        redirect_uris:
+        - urn:ietf:wg:oauth:2.0:oob
+        - http://localhost
+      credentials:
+        type: service_account
+        project_id: imposing-coast-257700
+        private_key_id: xxxxxxxx
+        private_key: xxxxxx.....
+        client_id: xxxxxxxxx
+        auth_uri: https://accounts.google.com/o/oauth2/auth
+        token_uri: https://oauth2.googleapis.com/token
+        auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+        client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/shrejain%40imposing-coast-257700.iam.gserviceaccount.com
   cloud:
     docker:
       cm:
