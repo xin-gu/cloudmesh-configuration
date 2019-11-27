@@ -17,6 +17,14 @@ cloudmesh:
     trace: true
     debug: true
     timer: false
+  security:
+    publickey: ~/.ssh/id_rsa.pub
+    privatekey: ~/.ssh/id_rsa
+    secpath: ~/.cloudmesh/security
+    secrets:
+    - .*AZURE_SECRET_KEY
+    - cloudmesh.comet.endpoints.dev.userpass.password
+    - cloudmesh.comet.endpoints.dev.apikey.*
   comet:
     username: TBD
     active: production
