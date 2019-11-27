@@ -141,7 +141,7 @@ cloudmesh:
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
         AZURE_REGION: 'northcentralus'
-    gcp:
+    google:
       cm:
         active: false
         heading: GCP
