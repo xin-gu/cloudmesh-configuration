@@ -147,7 +147,7 @@ cloudmesh:
         heading: GCP
         host: https://console.cloud.google.com/storage
         label: gcp
-        kind: gcpbucket
+        kind: google
         version: TBD
         service: storage
       default:
