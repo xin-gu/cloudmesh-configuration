@@ -433,11 +433,13 @@ class Config(object):
         try:
             return self.__getitem__(key)
         except KeyError:
-            path = self.config_pathy
-            Console.error(
-                "The key '{key}' could not be found in the yaml file '{path}'".format(
+            if default is None:
+                path = self.config_path
+                Console.warning(
+                    "The key '{key}' could not be found in the yaml file '{path}'".format(
                     **locals()))
-            # sys.exit(1)
+                # sys.exit(1)
+                raise KeyError(key)
             return default
         except Exception as e:
             print(e)
@@ -537,10 +539,11 @@ class Config(object):
                 element = element[key]
         except KeyError:
             path = self.config_path
-            Console.error(
+            Console.warning(
                 "The key '{item}' could not be found in the yaml file '{path}'".format(
                     **locals()))
-            sys.exit(1)
+            raise KeyError(item)
+            # sys.exit(1)
         except Exception as e:
             print(e)
             sys.exit(1)
