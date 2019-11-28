@@ -74,7 +74,7 @@ class Config(object):
 
         return [
                 "AZURE_SUBSCRIPTION_ID",
-                "AZURE_TENANTID",
+                "AZURE_TENANT_ID",
                 "AZURE_APPLICATION_ID",
                 "AZURE_SECRET_KEY",
                 "EC2_ACCESS_ID",
@@ -85,7 +85,12 @@ class Config(object):
                 "MONGO_PASSWORD",
                 "MONGO_USERNAME",
                 "password",
-                "passwd"
+                "passwd",
+                "project_id",
+                "private_key_id",
+                "private_key",
+                "client_id",
+                "client_x509_cert_url"
                 ]
 
 
@@ -376,7 +381,7 @@ class Config(object):
                   attributes=None,
                   color=None):
 
-        colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+        colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "12345", "xxxx"]
         if color:
             colors = colors + color
 
@@ -396,8 +401,12 @@ class Config(object):
                                                 color='BLUE')
                             break
             for colorme in colors:
-                line = line.replace(colorme,
-                                    Console.text(color='RED', message=colorme))
+                if colorme in line:
+                    attribute, value = line.split(":", 1)
+                    line = attribute + ": " + Console.text(color='RED', message=value)
+
+                                    #line = line.replace(colorme,
+                #                    Console.text(color='RED', message=colorme))
 
             lines.append(line)
 
