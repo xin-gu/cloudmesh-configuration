@@ -447,37 +447,6 @@ class Config(object):
             print(e)
             sys.exit(1)
 
-    def get_value(self, key_path=None, default=None):
-        """ 
-        Helper function to retrive value from config file from dot path
-
-        Usage:
-            path = 'cloudmesh.storage.azure.credentials.AZURE_SECRET_KEY'
-            v = config.get_value(path)
-        
-        param: key_path: dot path down to item within dict
-        param: default: the default value returned on failed search
-        return: default or value of key
-        """
-        try:
-            if "." in key_path:
-                keys = key_path.split(".")
-                parents = keys[:-1]
-                key = keys[-1]
-                location = self.data
-                for parent in parents:
-                    if parent not in location:
-                        return default
-                    else:
-                        location = location.get(parent)
-                return location.get(key, default)
-            else:
-                return self.data[key]
-        except KeyError as e:
-            Console.error(f"{e}")
-        except Exception as e:
-            Console.error(f"{e}")
-
     def __setitem__(self, key, value):
         self.set(key, value)
 
@@ -674,6 +643,7 @@ class Config(object):
         """
 
         # Helper variables
+        config = Config()
         ch = CmsHasher() # Will hash the paths to produce file name
         kh = KeyHandler() # Loads the public or private key bytes
         ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
@@ -685,17 +655,17 @@ class Config(object):
         revertfd.close() # close the data fd used to backup reversion file 
 
         # Secinit variables: location where keys are stored
-        cmssec_path = path_expand(self.get_value('cloudmesh.security.secpath'))
+        cmssec_path = path_expand(config['cloudmesh.security.secpath'])
         gcm_path = f"{cmssec_path}/gcm"
 
         # Get the public key
-        kp = self.get_value('cloudmesh.security.publickey')
+        kp = config['cloudmesh.security.publickey']
         print(f"pub:{kp}")
         pub = kh.load_key(kp, "PUB", "SSH", False)
 
         # Get the regular expressions from config file
         try:
-            secexps = self.get_value('cloudmesh.security.secrets')
+            secexps = config['cloudmesh.security.secrets']
             flat_conf = flatten(self.data, sep='.')
             keys = flat_conf.keys()
             for e in secexps: # for each expression in section
@@ -714,10 +684,10 @@ class Config(object):
                         Console.ok( f"\tencrypting: {path}")
                         ## Additional Authenticated Data: the cloudmesh version
                         # number is used to future-proof for version attacks 
-                        aad = self.get_value('cloudmesh.version')
+                        aad = config['cloudmesh.version']
 
                         # Get plaintext data from config
-                        pt = self.get_value(path)
+                        pt = config[path]
                         b_pt = pt.encode()
 
                         # Encrypt the cloudmesh.yaml attribute value
@@ -771,16 +741,16 @@ class Config(object):
         revertfd.close() # close the data fd used to backup reversion file 
 
         # Secinit variables: location where keys are stored
-        cmssec_path = path_expand(config.get_value('cloudmesh.security.secpath'))
+        cmssec_path = path_expand(config['cloudmesh.security.secpath'])
         gcm_path = f"{cmssec_path}/gcm"
 
         # Load the private key
-        kp = config.get_value('cloudmesh.security.privatekey')
+        kp = config['cloudmesh.security.privatekey']
         prv = kh.load_key(kp, "PRIV", "PEM", True)
 
         try:
             # Get the regular expressions from config file
-            secexps = config.get_value('cloudmesh.security.secrets')
+            secexps = config['cloudmesh.security.secrets']
             flat_conf = flatten(config.data, sep='.')
             keys = flat_conf.keys()
             for e in secexps: # for each expression in section
@@ -807,11 +777,11 @@ class Config(object):
                         b_n = ce.decrypt_rsa(priv = prv, ct = b_n_ct)
 
                         # Version number was used as aad
-                        aad = config.get_value('cloudmesh.version')
+                        aad = config['cloudmesh.version']
                         b_aad = aad.encode()
 
                         # Read ciphertext from config
-                        ct = int(config.get_value(path))
+                        ct = int(config[path])
                         b_ct = ct.to_bytes((ct.bit_length() + 7) // 8, 'big')
 
                         # Decrypt the attribute value ciphertext
@@ -833,4 +803,3 @@ class Config(object):
         named_temp.close() #close (and delete) the reversion file
 
         Console.ok("Success")
-        
