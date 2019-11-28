@@ -326,9 +326,12 @@ class Config(object):
             for variable in variables:
                 text = variable
                 variable = variable[1:-1]
-                value = eval("m.{variable}".format(**locals()))
-                if "{" not in value:
-                    spec = spec.replace(text, value)
+                try:
+                    value = eval("m.{variable}".format(**locals()))
+                    if "{" not in value:
+                        spec = spec.replace(text, value)
+                except:
+                    value = variable
         return spec
 
     def credentials(self, kind, name):
@@ -432,13 +435,14 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         """
         try:
-            return self.data.get(key, default)
+            return self.__getitem__(key)
         except KeyError:
-            path = self.config_path
+            path = self.config_pathy
             Console.error(
                 "The key '{key}' could not be found in the yaml file '{path}'".format(
                     **locals()))
-            sys.exit(1)
+            # sys.exit(1)
+            return default
         except Exception as e:
             print(e)
             sys.exit(1)
@@ -546,6 +550,9 @@ class Config(object):
 
     def default(self):
         return dotdict(self.data["cloudmesh"]["default"])
+
+    # def get(self, item):
+    #     return self.__getitem__(item)
 
     def __getitem__(self, item):
         """

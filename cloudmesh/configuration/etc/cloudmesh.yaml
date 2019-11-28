@@ -1,5 +1,5 @@
 cloudmesh:
-  version: "4.1.9"
+  version: 4.1.9
   profile:
     firstname: TBD
     lastname: TBD
@@ -7,6 +7,13 @@ cloudmesh:
     user: TBD
     github: TBD
     publickey: ~/.ssh/id_rsa.pub
+  security:
+    encryption: false
+    attributes:
+      - cloudmesh.storage.gdrive.credentials.client_secret
+      - cloudmesh.storage.gdrive.credentials.auth_uri
+      - cloudmesh.storage.gdrive.credentials.token_uri
+      - '*.token_uri'
   iu:
     user: TBD
   default:
@@ -59,8 +66,9 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      credentials:
+      default:
         directory: ~/a
+      credentials:
         name: TBD
         key: ~/.ssh/id_rsa.pub
     storage_b:
@@ -72,13 +80,14 @@ cloudmesh:
         kind: local
         version: TBD
         service: storage
-      credentials:
+      default:
         directory: ~/b
+      credentials:
         name: TBD
         key: ~/.ssh/id_rsa.pub
     box:
       cm:
-        active: False
+        active: false
         heading: Box
         host: box.com
         label: box
@@ -91,7 +100,7 @@ cloudmesh:
         config_path: TBD
     aws:
       cm:
-        active: False
+        active: false
         heading: homedir
         host: aws.com
         label: home-dir
@@ -109,7 +118,7 @@ cloudmesh:
         region: TBD
     gdrive:
       cm:
-        active: False
+        active: false
         heading: GDrive
         host: dgrive.google.com
         label: gdrive
@@ -121,16 +130,16 @@ cloudmesh:
       credentials:
         client_id: TBD
         project_id: TBD
-        auth_uri: "https://accounts.google.com/o/oauth2/auth"
+        auth_uri: https://accounts.google.com/o/oauth2/auth
         token_uri: TBD
         client_secret: TBD
-        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
+        auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
         redirect_uris:
-          - "urn:ietf:wg:oauth:2.0:oob"
-          - "http://localhost"
+          - urn:ietf:wg:oauth:2.0:oob
+          - http://localhost
     azure:
       cm:
-        active: False
+        active: false
         heading: AWS
         host: azure.mocrosoft.com
         label: azure_blob
@@ -138,21 +147,85 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        resource_group: 'cloudmesh'
+        resource_group: cloudmesh
         location: TBD
       credentials:
         account_name: TBD
         account_key: TBD
         container: TBD
-        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_TENANT_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_SUBSCRIPTION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_APPLICATION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         AZURE_SECRET_KEY: TBD
-        AZURE_REGION: 'northcentralus'
+        AZURE_REGION: northcentralus
+    google:
+      cm:
+        active: false
+        heading: GCP
+        host: https://console.cloud.google.com/storage
+        label: gcp
+        kind: google
+        version: TBD
+        service: storage
+      default:
+        directory: cloudmesh_gcp
+        Location_type: Region
+        Location: us-east1
+        Default_storage_class: Standard
+        Access_control: Uniform
+        Encryption: Google-managed
+        Link_URL: https://console.cloud.google.com/storage/browser/cloudmesh_gcp
+        Link_for_gsutil: gs://cloudmesh_gcp
+      credentialsold:
+        x-goog-project-id: 123451234512
+        service: service-123451234512@gs-project-accounts.iam.gserviceaccount.com
+        You: xxxxxx.......
+        Owners: xxxxx......
+        Editor: xxxxx......
+        Team: xxxxx......
+        uri: https://storage.googleapis.com
+        client_id: TBD
+        project_id: TBD
+        auth_uri: https://accounts.google.com/o/oauth2/auth
+        token_uri: TBD
+        client_secret: TBD
+        auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+        redirect_uris:
+          - urn:ietf:wg:oauth:2.0:oob
+          - http://localhost
+      credentials:
+        type: service_account
+        project_id: imposing-coast-257700
+        private_key_id: xxxxxxxx
+        private_key: xxxxxx.....
+        client_id: xxxxxxxxx
+        auth_uri: https://accounts.google.com/o/oauth2/auth
+        token_uri: https://oauth2.googleapis.com/token
+        auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+        client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/shrejain%40imposing-coast-257700.iam.gserviceaccount.com
+  database:
+    aws:
+      cm:
+        active: false
+        heading: homedir
+        host: aws.com
+        label: home-dir
+        kind: awssql
+        version: TBD
+        service: database
+      default:
+        directory: TBD
+      credentials:
+        server: TBD.us-east-2.rds.amazonaws.com
+        database: TBD
+        username: TBD
+        password: TBD
+        driver: '{ODBC Driver 17 for SQL Server}'
+        name: TBD
   cloud:
     docker:
       cm:
-        active: True
+        active: true
         heading: Docker
         host: localhost
         label: docker
@@ -160,42 +233,42 @@ cloudmesh:
         version: 18.09.2
         service: compute
       default:
-        os: "ubuntu"
-        version: "18.04"
+        os: ubuntu
+        version: '18.04'
       credentials:
-        key: "~/.ssh/id_rsa"
+        key: ~/.ssh/id_rsa
     azure:
       cm:
-        active: True
+        active: true
         heading: Azure
         host: azure.microsoft.com
         label: Azure
         kind: azure
-        version: 'latest'
+        version: latest
         service: compute
       default:
-        image: 'Canonical:UbuntuServer:16.04.0-LTS:latest'
-        size: 'Basic_A0'
-        resource_group: 'cloudmesh'
-        storage_account: 'cmdrive'
-        network: 'cmnetwork'
-        subnet: 'cmsubnet'
-        blob_container: 'vhds'
-        AZURE_VM_IP_CONFIG: 'cloudmesh-ip-config'
-        AZURE_VM_NIC: 'cloudmesh-nic'
-        AZURE_VM_DISK_NAME: 'cloudmesh-os-disk'
+        image: Canonical:UbuntuServer:16.04.0-LTS:latest
+        size: Basic_A0
+        resource_group: cloudmesh
+        storage_account: cmdrive
+        network: cmnetwork
+        subnet: cmsubnet
+        blob_container: vhds
+        AZURE_VM_IP_CONFIG: cloudmesh-ip-config
+        AZURE_VM_NIC: cloudmesh-nic
+        AZURE_VM_DISK_NAME: cloudmesh-os-disk
         AZURE_VM_USER: TBD
         AZURE_VM_PASSWORD: TBD
-        AZURE_VM_NAME: 'cloudmeshVM'
+        AZURE_VM_NAME: cloudmeshVM
       credentials:
-        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_TENANT_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_SUBSCRIPTION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_APPLICATION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         AZURE_SECRET_KEY: TBD
-        AZURE_REGION: 'eastus'
+        AZURE_REGION: eastus
     azurearm:
       cm:
-        active: False
+        active: false
         heading: AWS
         host: azure.mocrosoft.com
         label: azure_arm
@@ -203,22 +276,22 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
-        size: 'Basic_A0'
-        resource_group: 'cloudmesh'
-        storage_account: 'cmdrive'
-        network: 'cmnetwork'
-        subnet: 'cmsubnet'
-        blob_container: 'vhds'
+        image: Canonical:UbuntuServer:16.04-LTS:latest
+        size: Basic_A0
+        resource_group: cloudmesh
+        storage_account: cmdrive
+        network: cmnetwork
+        subnet: cmsubnet
+        blob_container: vhds
       credentials:
-        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_TENANT_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_SUBSCRIPTION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        AZURE_APPLICATION_ID: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         AZURE_SECRET_KEY: TBD
-        AZURE_REGION: 'northcentralus'
+        AZURE_REGION: northcentralus
     azureaz:
       cm:
-        active: False
+        active: false
         heading: AWS
         host: azure.mocrosoft.com
         label: azureaz
@@ -226,17 +299,17 @@ cloudmesh:
         version: TBD
         service: compute
       default:
-        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
-        size: 'Basic_A0'
-        resource_group: 'cloudmesh'
-        storage_account: 'cmdrive'
-        network: 'cmnetwork'
+        image: Canonical:UbuntuServer:16.04-LTS:latest
+        size: Basic_A0
+        resource_group: cloudmesh
+        storage_account: cmdrive
+        network: cmnetwork
       credentials:
-        resourcegroup: "test"
-        location: "eastus"
+        resourcegroup: test
+        location: eastus
     awslibcloud:
       cm:
-        active: False
+        active: false
         heading: AWS
         host: aws.amazon.com
         label: aws
@@ -244,18 +317,18 @@ cloudmesh:
         version: TBD
         service: compute
       default:
-        image: 'ami-0f65671a86f061fcd'
-        size: 't2.micro'
+        image: ami-0f65671a86f061fcd
+        size: t2.micro
       credentials:
-        region: 'us-west-2'
-        EC2_SECURITY_GROUP: 'group1'
+        region: us-west-2
+        EC2_SECURITY_GROUP: group1
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
-        EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
-        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
+        EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
+        EC2_PRIVATE_KEY_FILE_NAME: aws_cert
     aws:
       cm:
-        active: False
+        active: false
         heading: AWS
         host: aws.amazon.com
         label: aws
@@ -263,18 +336,18 @@ cloudmesh:
         version: TBD
         service: compute
       default:
-        image: 'ami-0f65671a86f061fcd'
-        size: 't2.micro'
+        image: ami-0f65671a86f061fcd
+        size: t2.micro
       credentials:
-        region: 'us-west-2'
-        EC2_SECURITY_GROUP: 'group1'
+        region: us-west-2
+        EC2_SECURITY_GROUP: group1
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
-        EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
-        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
+        EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
+        EC2_PRIVATE_KEY_FILE_NAME: aws_cert
     google:
       cm:
-        active: True
+        active: true
         heading: google
         host: google.cloud.com
         label: google
@@ -282,16 +355,16 @@ cloudmesh:
         version: TBD
         service: compute
       default:
-        image: 'Image Name'
-        size: 'n1-standard-4'
+        image: Image Name
+        size: n1-standard-4
       credentials:
-        datacenter: 'us-central1-a'
-        client_email: '<service account>.iam.gserviceaccount.com'
-        project: '<Project Name>'
-        path_to_json_file: '~/.cloudmesh/<file with credentials>'
+        datacenter: us-central1-a
+        client_email: <service account>.iam.gserviceaccount.com
+        project: <Project Name>
+        path_to_json_file: ~/.cloudmesh/<file with credentials>
     chameleon:
       cm:
-        active: True
+        active: true
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
@@ -316,7 +389,7 @@ cloudmesh:
         username: cc
     jetstream:
       cm:
-        active: True
+        active: true
         heading: Jetstream
         host: http://jetstream-cloud.org/
         label: jetstream
@@ -340,7 +413,7 @@ cloudmesh:
         image: Ubuntu-Server-14.04-LTS
     cybera-e:
       cm:
-        active: False
+        active: false
         heading: Cybera Edmonton OpenStack
         host: cybera
         label: kilo
@@ -360,10 +433,10 @@ cloudmesh:
         image: Ubuntu 14.04
     vagrant:
       credentials:
-        local: True
+        local: true
         hostname: localhost
       cm:
-        active: True
+        active: true
         heading: Vagrant
         host: TBD
         label: TBD
@@ -376,19 +449,19 @@ cloudmesh:
         key: ~/.ssh/id_rsa.pub
     vagrant_remote:
       cm:
-        active: False
+        active: false
         heading: Vagrant
         host: TBD
         label: TBD
         kind: TBD
         version: TBD
       credentials:
-        local: False
+        local: false
         hostname: 127.0.0.1
         username: albert
         key: ~/.ssh/id_rsa.pub
       default:
-        path: '~/.cloudmesh/vagrant'
+        path: ~/.cloudmesh/vagrant
   data:
     bug:
       comment: this type is not supported use storage instead
@@ -397,12 +470,12 @@ cloudmesh:
       service: local
     db:
       local:
-        CMDATA_DB_FOLDER: '~/cloudmesh/cloud/test/data/db'
+        CMDATA_DB_FOLDER: ~/cloudmesh/cloud/test/data/db
     service:
       local:
-        CMDATA_STORAGE_FOLDER: '~/cloudmesh/cloud/test/data/storage'
+        CMDATA_STORAGE_FOLDER: ~/cloudmesh/cloud/test/data/storage
       azure:
-        container: 'cmdata'
+        container: cmdata
         credentials:
           AZURE_STORAGE_ACCOUNT: ''
           AZURE_STORAGE_KEY: ''
@@ -411,14 +484,14 @@ cloudmesh:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
     mongo:
-      MONGO_AUTOINSTALL: False
-      MONGO_BREWINSTALL: False
+      MONGO_AUTOINSTALL: false
+      MONGO_BREWINSTALL: false
       LOCAL: ~/local
       MODE: native
-      MONGO_DBNAME: 'cloudmesh'
-      MONGO_HOST: '127.0.0.1'
+      MONGO_DBNAME: cloudmesh
+      MONGO_HOST: 127.0.0.1
       MONGO_PORT: '27017'
-      MONGO_USERNAME: 'admin'
+      MONGO_USERNAME: admin
       MONGO_PASSWORD: TBD
       MONGO_DOWNLOAD:
         docker:
@@ -448,7 +521,7 @@ cloudmesh:
   cluster:
     bigred2:
       cm: missing
-      active: False
+      active: false
       name: bigred2
       label: bigred
       address: bigred2.iu.edu
@@ -457,19 +530,19 @@ cloudmesh:
         pulickey: ~/.ssh/id_rsa.pub
     karst:
       cm: missing
-      active: False
+      active: false
       credentials:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     slurm-taito:
       cm: missing
-      active: False
+      active: false
       name: taito
       credentials:
         sshconfigpath: ~/.ssh/config
     clustera:
       cm: missing
-      active: False
+      active: false
       computer_a:
         name: computer_a
         label: one
@@ -487,7 +560,7 @@ cloudmesh:
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test1:
       cm: missing
-      active: False
+      active: false
       computer_a:
         name: machine1
         label: one
@@ -503,10 +576,12 @@ cloudmesh:
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test2:
       cm: missing
-      active: False
+      active: false
       c2:
         name: machine2
         label: two
         address: localhost
         credentials:
           sshconfigpath: ~/.ssh/config
+  test:
+    nested: Gregor
