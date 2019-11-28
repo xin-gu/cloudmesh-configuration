@@ -34,6 +34,7 @@ pathlib
 munch
 requests
 cloudmesh-common
+cloudmesh-cloud
 """.split("\n")
 
 version = readfile("VERSION").strip()
