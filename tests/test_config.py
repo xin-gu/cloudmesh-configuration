@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_local/test_config.py
-# pytest -v  tests/1_local/test_config.py
-# pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no tests/test_config.py
+# pytest -v  tests/test_config.py
+# pytest -v --capture=no  tests/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
 import six
 
@@ -131,7 +131,7 @@ class TestConfig:
         print(config["cloudmesh.test.nested"])
         assert config["cloudmesh.test.nested"] == "Gregor"
 
-    ''' THIS TEST DOE FAIL
+    ''' THIS TEST DOES FAIL
     def test_del(self):
         del config["cloudmesh.test.nested"]
 
@@ -143,6 +143,46 @@ class TestConfig:
             path = Path("~/.cloudmesh/cloudmesh.yaml")
             os.remove(backup)
             copyfile(path, backup)
+
+
+    def test_getitem(self):
+        config = Config()
+        key = "cloudmesh.version"
+        StopWatch.start(f"config[{key}]")
+        value = config[key]
+        StopWatch.stop(f"config[{key}]")
+        assert  value is not None
+
+    def test_get(self):
+        config = Config()
+        key = "cloudmesh.version"
+        StopWatch.start(f"get({key})")
+        value = config[key]
+        StopWatch.stop(f"get({key})")
+        assert  value is not None
+
+    def test_doesnotexist_get(self):
+        config = Config()
+
+        key = "cloudmesh.doesnotexist"
+        StopWatch.start(f"not exists get({key})")
+        value = config.get(key, default="Hallo")
+        StopWatch.stop(f"not exists get({key})")
+
+        assert value == "Hallo"
+
+    def test_doesnotexist_getitem(self):
+        config = Config()
+        key = "cloudmesh.doesnotexist"
+        StopWatch.start(f"not exists [{key}]")
+        try:
+            value = config[key]
+            keyerror = False
+        except KeyError:
+            keyerror = True
+        StopWatch.stop(f"not exists [{key}]")
+
+        assert keyerror
 
 
     def test_StopWatch(self):
