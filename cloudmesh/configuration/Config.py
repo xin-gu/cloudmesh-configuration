@@ -374,6 +374,16 @@ class Config(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
+    @staticmethod
+    def cat_dict(d,
+                 mask_secrets=True,
+                  attributes=None,
+                  color=None):
+        kluge = yaml.dump(d,
+                          default_flow_style=False, indent=2)
+        content = kluge.split("\n")
+
+        return Config.cat_lines(content, mask_secrets=mask_secrets)
 
     @staticmethod
     def cat_lines(content,
