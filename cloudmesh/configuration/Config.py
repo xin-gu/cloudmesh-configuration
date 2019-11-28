@@ -433,7 +433,7 @@ class Config(object):
         try:
             return self.__getitem__(key)
         except KeyError:
-            path = self.config_path
+            path = self.config_pathy
             Console.error(
                 "The key '{key}' could not be found in the yaml file '{path}'".format(
                     **locals()))
