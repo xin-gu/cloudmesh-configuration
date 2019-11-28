@@ -1,5 +1,5 @@
 cloudmesh:
-  version: "4.1.10"
+  version: "4.1.11"
   profile:
     firstname: TBD
     lastname: TBD
@@ -10,10 +10,10 @@ cloudmesh:
   security:
     encryption: False
     attributes:
-    - "cloudmesh.storage.gdrive.credentials.client_secret"
-    - "cloudmesh.storage.gdrive.credentials.auth_uri"
-    - "cloudmesh.storage.gdrive.credentials.token_uri"
-    - "*.token_uri"
+      - "cloudmesh.storage.gdrive.credentials.client_secret"
+      - "cloudmesh.storage.gdrive.credentials.auth_uri"
+      - "cloudmesh.storage.gdrive.credentials.token_uri"
+      - "*.token_uri"
   iu:
     user: TBD
   default:
@@ -21,9 +21,9 @@ cloudmesh:
     experiment: base
     cloud: chameleon
     cluster: clustera
-    trace: true
-    debug: true
-    timer: false
+    trace: True
+    debug: True
+    timer: False
   comet:
     username: TBD
     active: production
@@ -51,7 +51,7 @@ cloudmesh:
   storage:
     storage_a:
       cm:
-        active: false
+        active: False
         heading: Storage A
         host: localhost
         label: local
@@ -59,13 +59,13 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        directory: ~/a
+        directory: "~/a"
       credentials:
         name: TBD
-        key: ~/.ssh/id_rsa.pub
+        key: "~/.ssh/id_rsa.pub"
     storage_b:
       cm:
-        active: false
+        active: False
         heading: Storage B
         host: localhost
         label: local
@@ -73,10 +73,10 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        directory: ~/b
+        directory: "~/b"
       credentials:
-         name: TBD
-        key: ~/.ssh/id_rsa.pub
+        name: TBD
+        key: "~/.ssh/id_rsa.pub"
     box:
       cm:
         active: False
@@ -87,7 +87,7 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        directory: /
+        directory: "/"
       credentials:
         config_path: TBD
     aws:
@@ -152,7 +152,7 @@ cloudmesh:
         AZURE_REGION: 'northcentralus'
     google:
       cm:
-        active: false
+        active: False
         heading: GCP
         host: https://console.cloud.google.com/storage
         label: gcp
@@ -189,8 +189,8 @@ cloudmesh:
         client_secret: TBD
         auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
         redirect_uris:
-        - urn:ietf:wg:oauth:2.0:oob
-        - http://localhost
+          - urn:ietf:wg:oauth:2.0:oob
+          - http://localhost
       credentials:
         type: service_account
         project_id: imposing-coast-257700
@@ -219,7 +219,7 @@ cloudmesh:
         username: TBD
         password: TBD
         driver: '{ODBC Driver 17 for SQL Server}'
-        name: TBD          
+        name: TBD
   cloud:
     docker:
       cm:
