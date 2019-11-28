@@ -9,11 +9,18 @@ cloudmesh:
     publickey: ~/.ssh/id_rsa.pub
   security:
     encryption: false
+    publickey: ~/.ssh/id_rsa.pub
+    privatekey: ~/.ssh/id_rsa
+    secpath: ~/.cloudmesh/security
     attributes:
       - cloudmesh.storage.gdrive.credentials.client_secret
       - cloudmesh.storage.gdrive.credentials.auth_uri
       - cloudmesh.storage.gdrive.credentials.token_uri
       - '*.token_uri'
+    secrets:
+    - .*AZURE_SECRET_KEY
+    - cloudmesh.comet.endpoints.dev.userpass.password
+    - cloudmesh.comet.endpoints.dev.apikey.*
   iu:
     user: TBD
   default:
@@ -24,14 +31,6 @@ cloudmesh:
     trace: true
     debug: true
     timer: false
-  security:
-    publickey: ~/.ssh/id_rsa.pub
-    privatekey: ~/.ssh/id_rsa
-    secpath: ~/.cloudmesh/security
-    secrets:
-    - .*AZURE_SECRET_KEY
-    - cloudmesh.comet.endpoints.dev.userpass.password
-    - cloudmesh.comet.endpoints.dev.apikey.*
   comet:
     username: TBD
     active: production
