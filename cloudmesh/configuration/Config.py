@@ -322,9 +322,12 @@ class Config(object):
             for variable in variables:
                 text = variable
                 variable = variable[1:-1]
-                value = eval("m.{variable}".format(**locals()))
-                if "{" not in value:
-                    spec = spec.replace(text, value)
+                try:
+                    value = eval("m.{variable}".format(**locals()))
+                    if "{" not in value:
+                        spec = spec.replace(text, value)
+                except:
+                    value = variable
         return spec
 
     def credentials(self, kind, name):
