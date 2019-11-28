@@ -431,13 +431,14 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         """
         try:
-            return self.data.get(key, default)
+            return self.__getitem__(key)
         except KeyError:
             path = self.config_path
             Console.error(
                 "The key '{key}' could not be found in the yaml file '{path}'".format(
                     **locals()))
-            sys.exit(1)
+            # sys.exit(1)
+            return default
         except Exception as e:
             print(e)
             sys.exit(1)
@@ -514,6 +515,9 @@ class Config(object):
 
     def default(self):
         return dotdict(self.data["cloudmesh"]["default"])
+
+    # def get(self, item):
+    #     return self.__getitem__(item)
 
     def __getitem__(self, item):
         """
