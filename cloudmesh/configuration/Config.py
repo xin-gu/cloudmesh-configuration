@@ -804,28 +804,10 @@ class Config(object):
 
                     # Set the attribute with the plaintext value
                     config.set(path, pt)
-
-                    # Set temp file with cipher in case exception arises
-                    ft = f"{fp}.tmp" # use hashed filename with indicator
-                    e_ct = b64encode(b_ct).decode()
-                    writefd(filename = ft , content = e_ct)
-
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
             copy2(src = named_temp.name, dst = config.config_path)
             named_temp.close() #close (and delete) the reversion file
-            h = ch.hash_data(path, "MD5", "b64", True)
-            fp = f"{gcm_path}/{h}"
-            for path in paths:
-                h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}"
-                fpt = f"{fp}.tmp"
-                if os.path.exists(fpt):
-                    e_ct = readfile(fpt)
-                    b_ct = b64decode(e_ct)
-                    ct = int.from_bytes(b_ct, "big")
-                    config.set(path, ct)
-                    os.remove(fpt)
             raise e
 
         for path in paths:
@@ -833,7 +815,6 @@ class Config(object):
             fp = f"{gcm_path}/{h}"
             os.remove(f"{fp}.key")
             os.remove(f"{fp}.nonce")
-            os.remove(f"{fp}.tmp")
 
         named_temp.close() #close (and delete) the reversion file
 
