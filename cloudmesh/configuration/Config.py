@@ -669,6 +669,7 @@ class Config(object):
         ch = CmsHasher() # Will hash the paths to produce file name
         kh = KeyHandler() # Loads the public or private key bytes
         ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+        counter = 0
 
         #Create tmp file in case reversion is needed
         named_temp = tempfile.NamedTemporaryFile(delete=True)
@@ -688,12 +689,21 @@ class Config(object):
         # Get the regular expressions from config file
         try:
             secexps = config['cloudmesh.security.secrets']
+            prnexps = config['cloudmesh.security.exceptions']
             flat_conf = flatten(self.data, sep='.')
             keys = flat_conf.keys()
             for e in secexps: # for each expression in section
+                Console.ok( f"Expression:{e}")
                 r = re.compile(e)
                 paths = list( filter( r.match, keys ) )
-                Console.ok( f"Expression:{e}")
+
+                # Prune the paths using cloudmesh.security.exceptions expressions
+                # Note: cloudmesh.version and cloudmesh.security.* should be
+                # listed they are necessary for encryption and decryption
+                for pe in prnexps:
+                    prn = re.compile(pe)
+                    paths = list(filter(lambda i: not prn.match(i), paths))
+
                 for path in paths: # for each path that reaches the key
                     # Hash the path to create a base filename
                     # MD5 is acceptable since security does not rely on hiding path
@@ -703,6 +713,7 @@ class Config(object):
                     if exists(f"{fp}.key"):
                         Console.ok( f"\tAlready encrypted: {path}")
                     else:
+                        counter+=1
                         Console.ok( f"\tencrypting: {path}")
                         ## Additional Authenticated Data: the cloudmesh version
                         # number is used to future-proof for version attacks 
@@ -739,7 +750,8 @@ class Config(object):
             raise e
 
         named_temp.close() #close (and delete) the reversion file
-        Console.ok("Success")
+        Console.ok( f"Success: encrypted {counter} expressions")
+        return counter
 
     def decrypt(self):
         """
@@ -755,6 +767,7 @@ class Config(object):
         ch = CmsHasher() # Will hash the paths to produce file name
         kh = KeyHandler() # Loads the public or private key bytes
         ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+        counter = 0
 
         #Create tmp file in case reversion is needed
         named_temp = tempfile.NamedTemporaryFile(delete=True)
@@ -773,12 +786,21 @@ class Config(object):
         try:
             # Get the regular expressions from config file
             secexps = config['cloudmesh.security.secrets']
+            prnexps = config['cloudmesh.security.exceptions']
             flat_conf = flatten(config.data, sep='.')
             keys = flat_conf.keys()
             for e in secexps: # for each expression in section
+                Console.ok( f"Expression:{e}")
                 r = re.compile(e)
                 paths = list( filter( r.match, keys ) )
-                Console.ok( f"Expression:{e}")
+
+                # Prune the paths using cloudmesh.security.exceptions expressions
+                # Note: cloudmesh.version and cloudmesh.security.* should be
+                # listed they are necessary for encryption and decryption
+                for pe in prnexps:
+                    prn = re.compile(pe)
+                    paths = list(filter(lambda i: not prn.match(i), paths))
+
                 for path in paths: # for each path that reaches the key
                     # hash the path to find the file name
                     # MD5 is acceptable, attacker gains nothing by knowing path
@@ -787,6 +809,7 @@ class Config(object):
                     if not os.path.exists(f"{fp}.key"):
                         Console.ok( f"\tAlready plaintext: {path}" )
                     else:
+                        counter += 1
                         Console.ok( f"\tDecrypting: {path}")
                         # Decrypt symmetric key, using private key
                         k_ct = readfile(f"{fp}.key")
@@ -824,4 +847,5 @@ class Config(object):
 
         named_temp.close() #close (and delete) the reversion file
 
-        Console.ok("Success")
+        Console.ok( f"Success: decrypted {counter} expressions")
+        return counter
