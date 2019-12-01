@@ -656,11 +656,8 @@ class Config(object):
 
         Assumptions:
             1. ```cms init``` or ```cms config secinit``` has been executed
-            2. that the secidr is ~/.cloudmesh/security and exists [secinit]
-            3. Private key has same base name as public key
-            4. Public key ends with .pub, .pem, or any .[3 char combo]
-            5. Private key is in PEM format
-            6. The cloudmesh config version has not changed since encrypt
+            2. Private key is in PEM format
+            3. The cloudmesh config version has not changed since encrypt
                 This means data must re-encrypt upon every config upgrade
         """
 
@@ -702,18 +699,17 @@ class Config(object):
                     ## Additional Authenticated Data: the cloudmesh version
                     # number is used to future-proof for version attacks 
                     aad = config['cloudmesh.version']
+                    b_aad = aad.encode()
 
                     # Get plaintext data from config
                     pt = config[path]
-                    if type(pt) == bool:
-                        pt = str(pt)
-                    elif type(pt) == int:
+                    if type(pt) != str:
                         pt = str(pt)
 
                     b_pt = pt.encode()
 
                     # Encrypt the cloudmesh.yaml attribute value
-                    k, n, ct = ce.encrypt_aesgcm(data =b_pt, aad = aad.encode())
+                    k, n, ct = ce.encrypt_aesgcm(data =b_pt, aad = b_aad)
 
                     ## Write ciphertext contents
                     ct = int.from_bytes(ct, "big")
@@ -732,6 +728,7 @@ class Config(object):
                     n_ct = b64encode(n_ct).decode()
                     fn = f"{fp}.nonce"
                     writefd(filename = fn, content = n_ct)
+
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
             copy2(src = named_temp.name, dst = self.config_path)
@@ -862,4 +859,4 @@ class Config(object):
                 prn = re.compile(pe)
                 paths = list(filter(lambda i: not prn.match(i), paths))
             ret_list = ret_list + paths
-        return ret_list
+        return list(set(ret_list))
