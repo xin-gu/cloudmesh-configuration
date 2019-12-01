@@ -700,6 +700,7 @@ class Config(object):
                     # number is used to future-proof for version attacks 
                     aad = config['cloudmesh.version']
                     b_aad = aad.encode()
+                    b_aad = None
 
                     # Get plaintext data from config
                     pt = config[path]
@@ -793,6 +794,7 @@ class Config(object):
                     # Version number was used as aad
                     aad = config['cloudmesh.version']
                     b_aad = aad.encode()
+                    b_aad = None
 
                     # Read ciphertext from config
                     ct = int(config[path])
