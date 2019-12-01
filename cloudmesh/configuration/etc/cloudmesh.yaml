@@ -204,6 +204,24 @@ cloudmesh:
         password: TBD
         driver: '{ODBC Driver 17 for SQL Server}'
         name: TBD
+    azure:
+      cm:
+        active: False
+        heading: homedir
+        host: azure.microsoft.com
+        label: home-dir
+        kind: azuresql
+        version: TBD
+        service: database
+      default:
+        directory: TBD
+      credentials:
+        server: TBD.database.windows.net
+        database: TBD
+        username: TBD
+        password: TBD
+        driver: '{ODBC Driver 17 for SQL Server}'
+        name: TBD
   cloud:
     docker:
       cm:
