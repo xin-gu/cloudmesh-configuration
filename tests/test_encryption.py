@@ -15,12 +15,14 @@ import tempfile
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.util import path_expand, writefile, readfile
 from cloudmesh.security.encrypt import KeyHandler, CmsEncryptor
+from shutil import copy2
 
 @pytest.mark.incremental
 class TestEncrypt:
 
     def test_sec_section_exists(self):
-        config = Config()
+        default_path = "cloudmesh/configuration/etc/cloudmesh.yaml"
+        config = Config(default_path)
         res = config['cloudmesh.security']
         assert (res != [])
 
@@ -103,10 +105,10 @@ class TestEncrypt:
         # Given two callings on cipher the nonce should never repeat
         k1, n1, ct1 =ce.encrypt_aesgcm(data=data, aad=aad)
         k2, n2, ct2 = ce.encrypt_aesgcm(data=data, aad=aad)
-        assert(n1 != n2)
+        assert((n1 != n2) or (k1 != k2))
 
     def test_AESGCM_encryption(self):
-        # Will the encryption and decryption be equivalent?
+        # Will the encryption and decryption of arbitrary data be equivalent?
         ce = CmsEncryptor()
         data = ce.getRandomBytes()
         aad = b"test"
