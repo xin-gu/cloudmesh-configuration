@@ -733,8 +733,23 @@ class Config(object):
 
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
+            # Revert original copy of cloudmesh.yaml
             copy2(src = named_temp.name, dst = self.config_path)
             named_temp.close() #close (and delete) the reversion file
+
+            # Delete generated nonces and keys
+            for path in paths:
+                # Calculate hashed filename
+                h = ch.hash_data(path, "MD5", "b64", True)
+                fp = os.path.join(secpath, h)
+
+                # Remove key
+                if os.path.exists(f"{fp}.key"):
+                    os.remove(f"{fp}.key")
+
+                # Remove nonce
+                if os.path.exists(f"{fp}.nonce"):
+                    os.remove(f"{fp}.nonce")
             raise e
 
         named_temp.close() #close (and delete) the reversion file
