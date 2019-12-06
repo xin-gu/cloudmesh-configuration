@@ -657,8 +657,6 @@ class Config(object):
         Assumptions:
             1. ```cms init``` or ```cms config secinit``` has been executed
             2. Private key is in PEM format
-            3. The cloudmesh config version has not changed since encrypt
-                This means data must re-encrypt upon every config upgrade
         """
 
         # Helper variables
@@ -680,7 +678,7 @@ class Config(object):
         # Get the public key
         kp = config['cloudmesh.security.publickey']
         print(f"pub:{kp}")
-        pub = kh.load_key(kp, "PUB", "SSH", False)
+        pub = kh.load_key(kp, "PUB", "PEM", False)
 
         # Get the regular expressions from config file
         try:
@@ -756,7 +754,7 @@ class Config(object):
         Console.ok( f"Success: encrypted {counter} expressions")
         return counter
 
-    def decrypt(self):
+    def decrypt(self, has_password = True):
         """
         Decrypts all secrets within the config file
 
@@ -783,7 +781,7 @@ class Config(object):
 
         # Load the private key
         kp = config['cloudmesh.security.privatekey']
-        prv = kh.load_key(kp, "PRIV", "PEM", True)
+        prv = kh.load_key(kp, "PRIV", "PEM", has_password)
 
         try:
             paths = self.get_list_secrets()
@@ -852,8 +850,7 @@ class Config(object):
             paths = list( filter( r.match, keys ) )
 
             # Prune the paths using cloudmesh.security.exceptions expressions
-            # Note: cloudmesh.version and cloudmesh.security.* should be
-            # listed they are necessary for encryption and decryption
+            # Note: cloudmesh.security.* should be matched its vital for enc/dec
             for pe in prnexps:
                 prn = re.compile(pe)
                 paths = list(filter(lambda i: not prn.match(i), paths))
