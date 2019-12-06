@@ -675,7 +675,7 @@ class Config(object):
         revertfd.close() # close the data fd used to backup reversion file 
 
         # Secinit variables: location where keys are stored
-        gcm_path = path_expand(config['cloudmesh.security.secpath'])
+        secpath = path_expand(config['cloudmesh.security.secpath'])
 
         # Get the public key
         kp = config['cloudmesh.security.publickey']
@@ -689,7 +689,8 @@ class Config(object):
                 # Hash the path to create a base filename
                 # MD5 is acceptable since security does not rely on hiding path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}" #path to filename for key and nonce
+                fp = os.path.join(secpath, h)
+
                 # Check if the attribute has already been encrypted
                 if exists(f"{fp}.key"):
                     Console.ok( f"\tAlready encrypted: {path}")
@@ -763,7 +764,7 @@ class Config(object):
         revertfd.close() # close the data fd used to backup reversion file 
 
         # Secinit variables: location where keys are stored
-        gcm_path = path_expand(config['cloudmesh.security.secpath'])
+        secpath = path_expand(config['cloudmesh.security.secpath'])
 
         # Load the private key
         kp = config['cloudmesh.security.privatekey']
@@ -775,7 +776,7 @@ class Config(object):
                 # hash the path to find the file name
                 # MD5 is acceptable, attacker gains nothing by knowing path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}"
+                fp = os.path.join(secpath, h) 
                 if not os.path.exists(f"{fp}.key"):
                     Console.ok( f"\tAlready plaintext: {path}" )
                 else:
@@ -814,7 +815,7 @@ class Config(object):
 
         for path in paths:
             h = ch.hash_data(path, "MD5", "b64", True)
-            fp = f"{gcm_path}/{h}"
+            fp = os.path.join(secpath, h)
             os.remove(f"{fp}.key")
             os.remove(f"{fp}.nonce")
 
