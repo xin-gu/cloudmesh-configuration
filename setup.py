@@ -29,12 +29,13 @@ def readfile(filename):
 
 # pytz==2016.10
 
+# cloudmesh-common
+# cloudmesh-cloud
+
 requiers = """
 pathlib
 munch
 requests
-cloudmesh-common
-cloudmesh-cloud
 """.split("\n")
 
 version = readfile("VERSION").strip()
