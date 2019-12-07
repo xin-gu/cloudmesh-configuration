@@ -754,7 +754,7 @@ class Config(object):
         Console.ok( f"Success: encrypted {counter} expressions")
         return counter
 
-    def decrypt(self, has_password = True):
+    def decrypt(self, ask_pass = True):
         """
         Decrypts all secrets within the config file
 
@@ -781,7 +781,7 @@ class Config(object):
 
         # Load the private key
         kp = config['cloudmesh.security.privatekey']
-        prv = kh.load_key(kp, "PRIV", "PEM", has_password)
+        prv = kh.load_key(kp, "PRIV", "PEM", ask_pass)
 
         try:
             paths = self.get_list_secrets()
