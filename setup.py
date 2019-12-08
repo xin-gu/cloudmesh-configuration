@@ -36,6 +36,7 @@ requiers = """
 pathlib
 munch
 requests
+oyaml
 """.split("\n")
 
 version = readfile("VERSION").strip()
