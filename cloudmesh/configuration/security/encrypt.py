@@ -7,7 +7,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.common.util import path_expand, readfile
+from cloudmesh.common.util import path_expand, readfile, writefd, yn_choice
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
@@ -205,9 +205,9 @@ class KeyHandler:
         self.pub = pub
         self.pem = pem
 
-    def new_rsa_key(self, byte_size=2048, ask_password=True):
+    def new_rsa_key(self, byte_size=2048):
         """
-        Generates a new RSA private key and serializes it
+        Generates a new RSA private key 
         @param: int: size of key in bytes
         @param: bol: indicates if app must prompt for password
         return: serialized bytes of private the RSA key
@@ -218,40 +218,31 @@ class KeyHandler:
             backend=default_backend()
         )
 
-        # Calculate public key
-        self.pub = self.priv.public_key()
+        return self.priv
 
-        # Password management
-        pwd = None
-        if ask_password == False:  # Explicitly ensure password wasn't desired
-            pwd = None
-        else:  # All other cases will request password
-            pwd = self.requestPass("Password for the new key:")
-
-        # Serialize the key
-        return self.serialize_key(key_type="PRIV", password=pwd)
-
-    def get_pub_key_bytes(self, encoding="PEM", format="SubjectInfo"):
-        if self.pub is None:
-            if self.priv is None:
-                Console.error("Key data is empty")
-            else:
-                self.pub = self.priv.public_key()
-        else:
-            return self.serialize_key(key=self.pub, key_type="PUB",
-                                      encoding=encoding, format=format)
-
-    def serialize_key(self, debug=False, key=None, key_type=None,
-                      encoding="PEM",
-                      format="PKCS8", password=None):
+    def get_pub_key(self, priv = None):
         """
-        @param: bool:       cloudmesh debug flag
-        @param: key_object: pyca key object
-        @param: str:        the type of key file [PRIV, PUB]
-        @param: str:        the type of encoding [PEM, SSH]
-        @param: str:        private [PKCS8, OpenSSL], Public [SubjectInfo, SSH]
-        @param: str:        password for key (Private keys only)
-        return:             serialized key bytes
+        Given a Pyca private key instance return a Pyca public key instance
+        @param priv: the PYCA private key
+        return: the pyca RsaPublicKey
+        """
+        if priv == None:
+            Console.error( "No key was given" )
+        elif isinstance(priv, rsa.RSAPrivateKey):
+            return priv.public_key()
+        else:
+            raise UnsupportedAlgorithm
+
+    def serialize_key(self, debug=False, key=None, key_type="PRIV",
+                      encoding="PEM", format="PKCS8", ask_pass=True):
+        """
+        @param: debug:      cloudmesh debug flag
+        @param: key:        pyca key object
+        @param: key_type:   the type of key file [PRIV, PUB]
+        @param: encoding:   the type of encoding [PEM, SSH]
+        @param: format:     private [PKCS8, OpenSSL], Public [SubjectInfo, SSH]
+        @param: ask_pass:   Indicates if the key should have a password (True,False)
+        return:             serialized key bytes of the key
         """
         # TODO: add try-catching
         # Ensure the key is initialized
@@ -299,7 +290,7 @@ class KeyHandler:
         if encoding == "PEM":
             encode = serialization.Encoding.PEM
         elif encoding == "SSH":
-            encod = serialization.Encoding.OpenSSH
+            encode = serialization.Encoding.OpenSSH
         else:
             Console.error("Unsupported key encoding")
 
@@ -307,11 +298,15 @@ class KeyHandler:
         # This also assigns the password if given
         enc_alg = None
         if key_type == "PRIV":
-            if password is None:
+            if ask_pass == False:
                 enc_alg = serialization.NoEncryption()
             else:
-                pwd = str.encode(password)
-                enc_alg = serialization.BestAvailableEncryption(pwd)
+                pwd = self.requestPass("Password for the new key:")
+                if pwd == "":
+                    enc_alg = serialization.NoEncryption()
+                else:
+                    pwd = str.encode(password)
+                    enc_alg = serialization.BestAvailableEncryption(pwd)
 
         # Serialize key
         sk = None
@@ -321,6 +316,36 @@ class KeyHandler:
             sk = key.private_bytes(encoding=encode, format=key_format,
                                    encryption_algorithm=enc_alg)
         return sk
+
+    def write_key(self, key = None, path = None, mode = "wb"):
+        """
+        Writes the key to the path, creating directories as needed"
+        @param key:     The data being written yca key instance
+        @param path:    full path including file name
+        """
+        # Check if the key is empty
+        if key == None:
+            Console.error("Key is empty")
+            return 
+
+        if path == None:
+            Console.error("Path is empty")
+
+        # Create directories as needed for the key
+        dirs = os.path.dirname(path)
+        if not os.path.exists(dirs):
+            Shell.mkdir(dirs)
+
+        # Check if file exists at locations
+        if os.path.exists(path):
+            Console.info( f"{path} already exists" )
+            ovwr_r = yn_choice( message=f"overwrite {path}?", default="N")
+            if not ovwr_r:
+                Console.info( f"Not overwriting {path}. Quitting" )
+                return
+
+        # Write the file
+        writefd(filename = path, content = key, mode = mode)
 
     def load_key(self, path="", key_type="PUB", encoding="SSH", ask_pass=True):
         """
