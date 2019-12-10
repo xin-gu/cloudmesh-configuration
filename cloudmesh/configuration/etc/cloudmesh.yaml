@@ -18,9 +18,7 @@ cloudmesh:
       - cloudmesh.storage.gdrive.credentials.token_uri
       - '*.token_uri'
     secrets:
-    - .*AZURE_SECRET_KEY
-    - cloudmesh.comet.endpoints.dev.userpass.password
-    - cloudmesh.comet.endpoints.dev.apikey.*
+    - .*
     exceptions:
     - cloudmesh.version
     - cloudmesh.security.*
