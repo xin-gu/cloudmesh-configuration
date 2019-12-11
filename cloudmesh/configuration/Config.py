@@ -748,7 +748,7 @@ class Config(object):
                 # Remove nonce
                 if os.path.exists(f"{fp}.nonce"):
                     os.remove(f"{fp}.nonce")
-            raise e
+            sys.exit( f"{e}")
 
         named_temp.close() #close (and delete) the reversion file
         Console.ok( f"Success: encrypted {counter} expressions")
@@ -824,7 +824,7 @@ class Config(object):
             Console.error("reverting cloudmesh.yaml")
             copy2(src = named_temp.name, dst = config.config_path)
             named_temp.close() #close (and delete) the reversion file
-            raise e
+            sys.exit( f"{e}")
 
         for path in paths:
             h = ch.hash_data(path, "MD5", "b64", True)
