@@ -328,8 +328,8 @@ cloudmesh:
         EC2_SECURITY_GROUP: group1
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
-        EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
-        EC2_PRIVATE_KEY_FILE_NAME: aws_cert
+        EC2_PRIVATE_KEY_FILE_PATH: ~/.ssh/id_rsa.pem
+        EC2_PRIVATE_KEY_FILE_NAME: id_rsa
     aws:
       cm:
         active: true
