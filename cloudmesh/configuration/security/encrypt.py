@@ -68,8 +68,6 @@ class CmsEncryptor:
             pad = padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
                                algorithm=hashes.SHA256(),
                                label=None)
-        elif padding_scheme == "PKCS":
-            pad = padding.PKCS1v15
         else:
             Console.error("Unsupported padding scheme")
             sys.exit()
@@ -89,8 +87,6 @@ class CmsEncryptor:
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
                 label=None)
-        elif padding_scheme == "PKCS":
-            pad = padding.PKCS1v15
         else:
             Console.error("Unsupported padding scheme")
             sys.exit()
@@ -529,7 +525,7 @@ class KeyHandler:
 
         except ValueError as e:
             Console.error(f"Could not properly decode {encoding} key")
-            sys.exit()
+            raise e
         except TypeError as e:
             Console.error("""Password mismatch either: 
             1. given a password when file is not encrypted 
