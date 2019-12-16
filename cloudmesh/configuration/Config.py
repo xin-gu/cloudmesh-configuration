@@ -689,7 +689,25 @@ class Config(object):
         # Get the public key
         kp = config['cloudmesh.security.publickey']
         print(f"pub:{kp}")
-        pub = kh.load_key(kp, "PUB", "PEM", False)
+
+        # Load the key with PEM or OpenSSH encoding
+        pub = None
+        try:
+            Console.msg("Attempting to read key in PEM encoding")
+            pub = kh.load_key(kp, "PUB", "PEM", False)
+            Console.ok("Successfully loaded key")
+        except ValueError:
+            try:
+                Console.msg("Attempting to read key in OpenSSH encoding")
+                pub = kh.load_key(kp, "PUB", "SSH", False)
+                Console.ok("Successfully loaded key")
+            except ValueError:
+                m = "Public key must be PEM or OpenSSH encoded"
+                Console.error(f"{m}")
+                sys.exit()
+        except Exception as e:
+            Console.error(f"{e.message}")
+            sys.exit()
 
         # Get the regular expressions from config file
         try:
