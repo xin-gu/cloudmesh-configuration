@@ -26,9 +26,9 @@ from cloudmesh.common.util import writefile
 from cloudmesh.common.util import writefd
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.FlatDict import FlatDict
-from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
+from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, \
+    CmsHasher
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
-
 
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
@@ -58,7 +58,8 @@ class Config(object):
         Initialize the Config class.
 
         :param config_path: A local file path to cloudmesh yaml config
-            with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh.yaml`
+            with a root element `cloudmesh`.
+            Default: `~/.cloudmesh/cloudmesh.yaml`
         """
 
         self.__dict__ = self.__shared_state
@@ -76,36 +77,37 @@ class Config(object):
     @staticmethod
     def secrets():
         return [
-                "AZURE_SUBSCRIPTION_ID",
-                "AZURE_TENANT_ID",
-                "AZURE_APPLICATION_ID",
-                "AZURE_SECRET_KEY",
-                "EC2_ACCESS_ID",
-                "EC2_SECRET_KEY",
-                "OS_PASSWORD",
-                "OS_USERNAME",
-                "OS_PROJECT_ID",
-                "MONGO_PASSWORD",
-                "MONGO_USERNAME",
-                "password",
-                "passwd",
-                "project_id",
-                "private_key_id",
-                "private_key",
-                "client_id",
-                "client_x509_cert_url"
-                ]
-
+            "AZURE_SUBSCRIPTION_ID",
+            "AZURE_TENANT_ID",
+            "AZURE_APPLICATION_ID",
+            "AZURE_SECRET_KEY",
+            "EC2_ACCESS_ID",
+            "EC2_SECRET_KEY",
+            "OS_PASSWORD",
+            "OS_USERNAME",
+            "OS_PROJECT_ID",
+            "MONGO_PASSWORD",
+            "MONGO_USERNAME",
+            "password",
+            "passwd",
+            "project_id",
+            "private_key_id",
+            "private_key",
+            "client_id",
+            "client_x509_cert_url"
+        ]
 
     def fetch(self,
               url=None,
               destination=None):
         """
 
-        fetches the cloudmesh yaml file and places it in the given destination dir
+        fetches the cloudmesh yaml file and places it in the given
+        destination dir
 
         :param url: The url of the cloudmesh.yaml file from github
-        :param destionation: The destination file. If not specified it is the home dir.
+        :param destionation: The destination file. If not specified it is the
+                             home dir.
         :return:
         """
         if url is None:
@@ -116,7 +118,6 @@ class Config(object):
         destination = path_expand(destination)
 
         Shell.mkdir("~/.cloudmesh")
-
 
         r = requests.get(url)
         content = r.text
@@ -236,7 +237,8 @@ class Config(object):
             print("")
             print("See also: ")
             print()
-            print("  https://github.com/cloudmesh/cloudmesh-configuration/blob/master/cloudmesh/configuration/etc/cloudmesh.yaml")
+            print(
+                "  https://github.com/cloudmesh/cloudmesh-configuration/blob/master/cloudmesh/configuration/etc/cloudmesh.yaml")
 
         banner("Check for TAB Characters")
 
@@ -291,7 +293,7 @@ class Config(object):
                     i for i in range(len(line)) if line.startswith('\t', i)]
                 if verbose:
                     Console.error(
-                        "Tab found in line {line_no} and column(s) {location}"\
+                        "Tab found in line {line_no} and column(s) {location}"
                             .format(**locals()))
                     line_no += 1
         return file_contains_tabs
@@ -347,6 +349,7 @@ class Config(object):
         """
         return self.data["cloudmesh"][kind][name]["credentials"]
 
+    # noinspection PyPep8Naming
     def check_for_TBD(self, kind, name):
 
         configuration = Config()["cloudmesh.{kind}.{name}".format(**locals())]
@@ -354,7 +357,7 @@ class Config(object):
         result = {"cloudmesh": {"cloud": {name: configuration}}}
 
         banner("checking cloudmesh.{kind}.{name} in "
-            "~/.cloudmesh/cloudmesh.yaml file".format(**locals()))
+               "~/.cloudmesh/cloudmesh.yaml file".format(**locals()))
 
         print(yaml.dump(result))
 
@@ -416,9 +419,10 @@ class Config(object):
             for colorme in colors:
                 if colorme in line:
                     attribute, value = line.split(":", 1)
-                    line = attribute + ":" + Console.text(color='RED', message=value)
+                    line = attribute + ":" + Console.text(color='RED',
+                                                          message=value)
 
-                                    #line = line.replace(colorme,
+                    # line = line.replace(colorme,
                 #                    Console.text(color='RED', message=colorme))
 
             lines.append(line)
@@ -459,7 +463,7 @@ class Config(object):
                 path = self.config_path
                 Console.warning(
                     "The key '{key}' could not be found in the yaml file '{path}'".format(
-                    **locals()))
+                        **locals()))
                 # sys.exit(1)
                 raise KeyError(key)
             return default
@@ -476,7 +480,8 @@ class Config(object):
         a chain of `set()` calls.
 
         Usage:
-            mongo_conn = conf.set('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
+            mongo_conn = conf.set('db.mongo.MONGO_CONNECTION_STRING',
+                         "https://localhost:3232")
 
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
@@ -523,7 +528,8 @@ class Config(object):
         a chain of `set()` calls.
 
         Usage:
-            mongo_conn = conf.get('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
+            mongo_conn = conf.get('db.mongo.MONGO_CONNECTION_STRING',
+                                  "https://localhost:3232")
 
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
@@ -629,8 +635,8 @@ class Config(object):
             config = Config()
             values = config[attribute]
 
-            print("Editing the values for {attribute}"\
-                .format(attribute=attribute))
+            print("Editing the values for {attribute}"
+                  .format(attribute=attribute))
 
             print("Current Values:")
 
@@ -638,15 +644,15 @@ class Config(object):
 
             for key in values:
                 if values[key] == "TBD":
-                    result = input("Please enter new value for {key}: "\
-                            .format(**locals()))
+                    result = input("Please enter new value for {key}: "
+                                   .format(**locals()))
                     values[key] = result
 
             config.save()
         except Exception as e:
             print(e)
             Console.error(
-                "could not find the attribute '{attribute}' in the yaml file."\
+                "could not find the attribute '{attribute}' in the yaml file."
                     .format(**locals()))
 
     def encrypt(self):
@@ -662,16 +668,17 @@ class Config(object):
 
         # Helper variables
         config = Config()
-        ch = CmsHasher() # Will hash the paths to produce file name
-        kh = KeyHandler() # Loads the public or private key bytes
-        ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+        ch = CmsHasher()  # Will hash the paths to produce file name
+        kh = KeyHandler()  # Loads the public or private key bytes
+        ce = CmsEncryptor()  # Assymmetric and Symmetric encryptor
         counter = 0
 
-        #Create tmp file in case reversion is needed
+        # Create tmp file in case reversion is needed
         named_temp = tempfile.NamedTemporaryFile(delete=True)
-        revertfd = open(named_temp.name, 'w') # open file for reading and writing
-        yaml.dump(self.data, revertfd) # dump file in yaml format
-        revertfd.close() # close the data fd used to backup reversion file 
+        revertfd = open(named_temp.name,
+                        'w')  # open file for reading and writing
+        yaml.dump(self.data, revertfd)  # dump file in yaml format
+        revertfd.close()  # close the data fd used to backup reversion file
 
         # Secinit variables: location where keys are stored
         gcm_path = path_expand(config['cloudmesh.security.secpath'])
@@ -684,18 +691,18 @@ class Config(object):
         # Get the regular expressions from config file
         try:
             paths = self.get_list_secrets()
-            for path in paths: # for each path that reaches the key
+            for path in paths:  # for each path that reaches the key
                 # Hash the path to create a base filename
                 # MD5 is acceptable since security does not rely on hiding path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}" #path to filename for key and nonce
+                fp = f"{gcm_path}/{h}"  # path to filename for key and nonce
                 # Check if the attribute has already been encrypted
                 if exists(f"{fp}.key"):
-                    Console.ok( f"\tAlready encrypted: {path}")
+                    Console.ok(f"\tAlready encrypted: {path}")
                 else:
-                    counter+=1
-                    Console.ok( f"\tencrypting: {path}")
-                    ## Additional Authenticated Data: the cloudmesh version
+                    counter += 1
+                    Console.ok(f"\tencrypting: {path}")
+                    # Additional Authenticated Data: the cloudmesh version
                     # number is used to future-proof for version attacks 
                     aad = config['cloudmesh.version']
                     b_aad = aad.encode()
@@ -709,57 +716,59 @@ class Config(object):
                     b_pt = pt.encode()
 
                     # Encrypt the cloudmesh.yaml attribute value
-                    k, n, ct = ce.encrypt_aesgcm(data =b_pt, aad = b_aad)
+                    k, n, ct = ce.encrypt_aesgcm(data=b_pt, aad=b_aad)
 
-                    ## Write ciphertext contents
+                    # Write ciphertext contents
                     ct = int.from_bytes(ct, "big")
                     self.set(path, f"{ct}")
 
                     # Encrypt symmetric key with users public key
-                    k_ct = ce.encrypt_rsa(pub = pub, pt = k)
-                    ## Write key to file
+                    k_ct = ce.encrypt_rsa(pub=pub, pt=k)
+                    # Write key to file
                     k_ct = b64encode(k_ct).decode()
-                    fk = f"{fp}.key" # use hashed filename with indicator
-                    writefd(filename = fk , content = k_ct)
+                    fk = f"{fp}.key"  # use hashed filename with indicator
+                    writefd(filename=fk, content=k_ct)
 
                     # Encrypt nonce with users private key
-                    n_ct = ce.encrypt_rsa(pub = pub, pt = n)
-                    ## Write nonce to file
+                    n_ct = ce.encrypt_rsa(pub=pub, pt=n)
+                    # Write nonce to file
                     n_ct = b64encode(n_ct).decode()
                     fn = f"{fp}.nonce"
-                    writefd(filename = fn, content = n_ct)
+                    writefd(filename=fn, content=n_ct)
 
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
-            copy2(src = named_temp.name, dst = self.config_path)
-            named_temp.close() #close (and delete) the reversion file
+            copy2(src=named_temp.name, dst=self.config_path)
+            named_temp.close()  # close (and delete) the reversion file
             raise e
 
-        named_temp.close() #close (and delete) the reversion file
-        Console.ok( f"Success: encrypted {counter} expressions")
+        named_temp.close()  # close (and delete) the reversion file
+        Console.ok(f"Success: encrypted {counter} expressions")
         return counter
 
     def decrypt(self):
         """
         Decrypts all secrets within the config file
 
-        Assumptions: please reference assumptions within encryption section above
+        Assumptions: please reference assumptions within encryption
+                     section above
 
         Note: could be migrated to Config() directly
 
         """
         # Helper Classes 
         config = Config()
-        ch = CmsHasher() # Will hash the paths to produce file name
-        kh = KeyHandler() # Loads the public or private key bytes
-        ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+        ch = CmsHasher()  # Will hash the paths to produce file name
+        kh = KeyHandler()  # Loads the public or private key bytes
+        ce = CmsEncryptor()  # Assymmetric and Symmetric encryptor
         counter = 0
 
-        #Create tmp file in case reversion is needed
+        # Create tmp file in case reversion is needed
         named_temp = tempfile.NamedTemporaryFile(delete=True)
-        revertfd = open(named_temp.name, 'w') # open file for reading and writing
-        yaml.dump(config.data, revertfd) # dump file in yaml format
-        revertfd.close() # close the data fd used to backup reversion file 
+        revertfd = open(named_temp.name,
+                        'w')  # open file for reading and writing
+        yaml.dump(config.data, revertfd)  # dump file in yaml format
+        revertfd.close()  # close the data fd used to backup reversion file
 
         # Secinit variables: location where keys are stored
         gcm_path = path_expand(config['cloudmesh.security.secpath'])
@@ -770,25 +779,25 @@ class Config(object):
 
         try:
             paths = self.get_list_secrets()
-            for path in paths: # for each path that reaches the key
+            for path in paths:  # for each path that reaches the key
                 # hash the path to find the file name
                 # MD5 is acceptable, attacker gains nothing by knowing path
                 h = ch.hash_data(path, "MD5", "b64", True)
                 fp = f"{gcm_path}/{h}"
                 if not os.path.exists(f"{fp}.key"):
-                    Console.ok( f"\tAlready plaintext: {path}" )
+                    Console.ok(f"\tAlready plaintext: {path}")
                 else:
                     counter += 1
-                    Console.ok( f"\tDecrypting: {path}")
+                    Console.ok(f"\tDecrypting: {path}")
                     # Decrypt symmetric key, using private key
                     k_ct = readfile(f"{fp}.key")
                     b_k_ct = b64decode(k_ct)
-                    b_k = ce.decrypt_rsa(priv = prv, ct = b_k_ct)
+                    b_k = ce.decrypt_rsa(priv=prv, ct=b_k_ct)
 
                     # Decrypt nonce, using private key
                     n_ct = readfile(f"{fp}.nonce")
                     b_n_ct = b64decode(n_ct)
-                    b_n = ce.decrypt_rsa(priv = prv, ct = b_n_ct)
+                    b_n = ce.decrypt_rsa(priv=prv, ct=b_n_ct)
 
                     # Version number was used as aad
                     aad = config['cloudmesh.version']
@@ -800,15 +809,16 @@ class Config(object):
                     b_ct = ct.to_bytes((ct.bit_length() + 7) // 8, 'big')
 
                     # Decrypt the attribute value ciphertext
-                    pt=ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad, ct=b_ct)
+                    pt = ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad,
+                                           ct=b_ct)
                     pt = pt.decode()
 
                     # Set the attribute with the plaintext value
                     config.set(path, pt)
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
-            copy2(src = named_temp.name, dst = config.config_path)
-            named_temp.close() #close (and delete) the reversion file
+            copy2(src=named_temp.name, dst=config.config_path)
+            named_temp.close()  # close (and delete) the reversion file
             raise e
 
         for path in paths:
@@ -817,9 +827,9 @@ class Config(object):
             os.remove(f"{fp}.key")
             os.remove(f"{fp}.nonce")
 
-        named_temp.close() #close (and delete) the reversion file
+        named_temp.close()  # close (and delete) the reversion file
 
-        Console.ok( f"Success: decrypted {counter} expressions")
+        Console.ok(f"Success: decrypted {counter} expressions")
         return counter
 
     def get_list_secrets(self):
@@ -830,9 +840,9 @@ class Config(object):
         prnexps = config['cloudmesh.security.exceptions']
         flat_conf = flatten(config.data, sep='.')
         keys = flat_conf.keys()
-        for e in secexps: # for each expression in section
+        for e in secexps:  # for each expression in section
             r = re.compile(e)
-            paths = list( filter( r.match, keys ) )
+            paths = list(filter(r.match, keys))
 
             # Prune the paths using cloudmesh.security.exceptions expressions
             # Note: cloudmesh.version and cloudmesh.security.* should be
