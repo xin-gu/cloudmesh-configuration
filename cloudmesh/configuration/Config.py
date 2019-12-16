@@ -788,9 +788,6 @@ class Config(object):
 
         Assumptions: please reference assumptions within encryption
                      section above
-
-        Note: could be migrated to Config() directly
-
         """
         # Helper Classes 
         config = Config()
@@ -801,8 +798,7 @@ class Config(object):
 
         # Create tmp file in case reversion is needed
         named_temp = tempfile.NamedTemporaryFile(delete=True)
-        revertfd = open(named_temp.name,
-                        'w')  # open file for reading and writing
+        revertfd = open(named_temp.name, 'w')  # open file for writing
         yaml.dump(config.data, revertfd)  # dump file in yaml format
         revertfd.close()  # close the data fd used to backup reversion file
 
