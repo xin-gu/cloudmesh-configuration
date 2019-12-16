@@ -321,11 +321,11 @@ cloudmesh:
         EC2_SECURITY_GROUP: group1
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
-        EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
-        EC2_PRIVATE_KEY_FILE_NAME: aws_cert
+        EC2_PRIVATE_KEY_FILE_PATH: ~/.ssh/id_rsa.pem
+        EC2_PRIVATE_KEY_FILE_NAME: id_rsa
     aws:
       cm:
-        active: false
+        active: true
         heading: AWS
         host: aws.amazon.com
         label: aws
@@ -333,11 +333,11 @@ cloudmesh:
         version: TBD
         service: compute
       default:
-        image: ami-0f65671a86f061fcd
-        size: t2.micro
+        image: ami-0c929bde1796e1484
+        size: t2.medium
       credentials:
-        region: us-west-2
-        EC2_SECURITY_GROUP: group1
+        region: us-east-2
+        EC2_SECURITY_GROUP: cloudmesh
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
         EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
