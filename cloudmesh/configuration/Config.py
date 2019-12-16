@@ -321,7 +321,6 @@ class Config(object):
 
     def spec_replace(self, spec):
 
-        #
         # TODO: BUG: possible bug redundant char \{ in escape
         #            may be relevant for python 2 may behave differnet in
         #            differnt python versions, has to be checked. a unit test
