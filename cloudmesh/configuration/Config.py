@@ -75,7 +75,6 @@ class Config(object):
 
     @staticmethod
     def secrets():
-
         return [
                 "AZURE_SUBSCRIPTION_ID",
                 "AZURE_TENANT_ID",
@@ -376,13 +375,13 @@ class Config(object):
         return self.data
 
     def __str__(self):
-        return yaml.dump(self.data, default_flow_style=False, indent=2)
+        return self.cat_dict(self.data)
 
     @staticmethod
     def cat_dict(d,
                  mask_secrets=True,
-                  attributes=None,
-                  color=None):
+                 attributes=None,
+                 color=None):
         kluge = yaml.dump(d,
                           default_flow_style=False, indent=2)
         content = kluge.split("\n")
@@ -417,7 +416,7 @@ class Config(object):
             for colorme in colors:
                 if colorme in line:
                     attribute, value = line.split(":", 1)
-                    line = attribute + ": " + Console.text(color='RED', message=value)
+                    line = attribute + ":" + Console.text(color='RED', message=value)
 
                                     #line = line.replace(colorme,
                 #                    Console.text(color='RED', message=colorme))
