@@ -9,7 +9,7 @@ import tempfile
 
 from base64 import b64encode, b64decode
 from os import mkdir
-from os.path import isfile, join, realpath, exists, dirname
+from os.path import isfile, realpath, exists, dirname
 from pathlib import Path
 from shutil import copyfile, copy2
 
@@ -19,7 +19,6 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import backup_name
 from cloudmesh.common.util import banner
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import readfile
 from cloudmesh.common.util import writefile
@@ -106,7 +105,7 @@ class Config(object):
         destination dir
 
         :param url: The url of the cloudmesh.yaml file from github
-        :param destionation: The destination file. If not specified it is the
+        :param destination: The destination file. If not specified it is the
                              home dir.
         :return:
         """
@@ -322,6 +321,12 @@ class Config(object):
 
     def spec_replace(self, spec):
 
+        #
+        # TODO: BUG: possible bug redundant char \{ in escape
+        #            may be relevant for python 2 may behave differnet in
+        #            differnt python versions, has to be checked. a unit test
+        #            should be created to just check the \{ issue
+        #
         variables = re.findall(r"\{\w.+\}", spec)
 
         for i in range(0, len(variables)):
@@ -737,8 +742,8 @@ class Config(object):
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
             # Revert original copy of cloudmesh.yaml
-            copy2(src = named_temp.name, dst = self.config_path)
-            named_temp.close() #close (and delete) the reversion file
+            copy2(src=named_temp.name, dst=self.config_path)
+            named_temp.close()  # close (and delete) the reversion file
 
             # Delete generated nonces and keys
             for path in paths:
@@ -753,13 +758,13 @@ class Config(object):
                 # Remove nonce
                 if os.path.exists(f"{fp}.nonce"):
                     os.remove(f"{fp}.nonce")
-            sys.exit( f"{e}")
+            sys.exit(f"{e}")
 
         named_temp.close()  # close (and delete) the reversion file
         Console.ok(f"Success: encrypted {counter} expressions")
         return counter
 
-    def decrypt(self, ask_pass = True):
+    def decrypt(self, ask_pass=True):
         """
         Decrypts all secrets within the config file
 
@@ -796,7 +801,7 @@ class Config(object):
                 # hash the path to find the file name
                 # MD5 is acceptable, attacker gains nothing by knowing path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = os.path.join(secpath, h) 
+                fp = os.path.join(secpath, h)
                 if not os.path.exists(f"{fp}.key"):
                     Console.ok(f"\tAlready plaintext: {path}")
                 else:
@@ -830,9 +835,9 @@ class Config(object):
                     config.set(path, pt)
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
-            copy2(src = named_temp.name, dst = config.config_path)
-            named_temp.close() #close (and delete) the reversion file
-            sys.exit( f"{e}")
+            copy2(src=named_temp.name, dst=config.config_path)
+            named_temp.close()  # close (and delete) the reversion file
+            sys.exit(f"{e}")
 
         for path in paths:
             h = ch.hash_data(path, "MD5", "b64", True)
