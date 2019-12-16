@@ -14,7 +14,8 @@ import pytest
 import tempfile
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.util import path_expand, writefile, readfile
-from cloudmesh.security.encrypt import KeyHandler, CmsEncryptor
+#from cloudmesh.security.encrypt import KeyHandler, CmsEncryptor
+from cloudmesh.configuration.security.encrypt import KeyHandler, CmsEncryptor
 from shutil import copy2
 
 @pytest.mark.incremental
@@ -29,8 +30,9 @@ class TestEncrypt:
     def test_kh_load_public(self):
         # Generate new keys
         kh = KeyHandler()
-        r = kh.new_rsa_key(ask_password=False)
-        u = kh.get_pub_key_bytes()
+        r = kh.new_rsa_key( byte_size = 2048 )
+        u = kh.serialize_key(key = kh.get_pub_key(priv=r), key_type="PUB", 
+                        encoding="PEM", format="SubjectInfo", ask_pass=False)
 
         # Write keys to temp
         tmp = tempfile.NamedTemporaryFile(delete=True)
@@ -41,15 +43,18 @@ class TestEncrypt:
         tu = kh.load_key(tmp.name, key_type="PUB", encoding="PEM", ask_pass=False)
 
         # Serialize the bytes
-        t = kh.serialize_key(key=tu, key_type="PUB"
-                        , encoding="PEM", format="SubjectInfo")
+        t = kh.serialize_key(key=tu, key_type="PUB", encoding="PEM", 
+                            format="SubjectInfo", ask_pass = False )
+
         #Check if they are the same
         assert(t == u)
 
     def test_kh_load_private(self):
         # Generate new keys
         kh = KeyHandler()
-        r = kh.new_rsa_key(ask_password=False)
+        r = kh.new_rsa_key( byte_size = 2048 )
+        r = kh.serialize_key( key = r, key_type = "PRIV", encoding = "PEM",
+                            format = "PKCS8", ask_pass = False )
 
         # Write keys to temp
         tmp = tempfile.NamedTemporaryFile(delete=True)
@@ -61,7 +66,7 @@ class TestEncrypt:
 
         # Serialize the bytes
         t = kh.serialize_key(key=tr, key_type="PRIV"
-                        , encoding="PEM", format="PKCS8")
+                        , encoding="PEM", format="PKCS8", ask_pass=False)
 
         #Check if they are the same
         assert(t == r)
@@ -72,21 +77,8 @@ class TestEncrypt:
 
         # Generate new keys
         kh = KeyHandler()
-        r = kh.new_rsa_key(ask_password=False)
-        u = kh.get_pub_key_bytes()
-
-        # Load the public key
-        ## Since 'u' is currently in bytes form we need to reload for pyca key
-        tmp = tempfile.NamedTemporaryFile(delete=True)
-        tmp.write(u)
-        tmp.seek(0)
-        u = kh.load_key(tmp.name, key_type="PUB", encoding="PEM", ask_pass=False)
-
-        # Load priv key
-        ## Since 'r' is currently in bytes form we need to reload for pyca key
-        tmp.write(r)
-        tmp.seek(0)
-        r = kh.load_key(tmp.name, key_type="PRIV", encoding="PEM", ask_pass=False)
+        r = kh.new_rsa_key( byte_size = 2048 )
+        u = kh.get_pub_key( priv = r )
 
         # Encrypt the data
         ct = ce.encrypt_rsa(pub=u, pt=data, padding_scheme="OAEP")

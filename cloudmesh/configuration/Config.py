@@ -662,8 +662,6 @@ class Config(object):
         Assumptions:
             1. ```cms init``` or ```cms config secinit``` has been executed
             2. Private key is in PEM format
-            3. The cloudmesh config version has not changed since encrypt
-                This means data must re-encrypt upon every config upgrade
         """
 
         # Helper variables
@@ -681,12 +679,12 @@ class Config(object):
         revertfd.close()  # close the data fd used to backup reversion file
 
         # Secinit variables: location where keys are stored
-        gcm_path = path_expand(config['cloudmesh.security.secpath'])
+        secpath = path_expand(config['cloudmesh.security.secpath'])
 
         # Get the public key
         kp = config['cloudmesh.security.publickey']
         print(f"pub:{kp}")
-        pub = kh.load_key(kp, "PUB", "SSH", False)
+        pub = kh.load_key(kp, "PUB", "PEM", False)
 
         # Get the regular expressions from config file
         try:
@@ -695,7 +693,7 @@ class Config(object):
                 # Hash the path to create a base filename
                 # MD5 is acceptable since security does not rely on hiding path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}"  # path to filename for key and nonce
+                fp = os.path.join(secpath, h)
                 # Check if the attribute has already been encrypted
                 if exists(f"{fp}.key"):
                     Console.ok(f"\tAlready encrypted: {path}")
@@ -738,15 +736,30 @@ class Config(object):
 
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
-            copy2(src=named_temp.name, dst=self.config_path)
-            named_temp.close()  # close (and delete) the reversion file
-            raise e
+            # Revert original copy of cloudmesh.yaml
+            copy2(src = named_temp.name, dst = self.config_path)
+            named_temp.close() #close (and delete) the reversion file
+
+            # Delete generated nonces and keys
+            for path in paths:
+                # Calculate hashed filename
+                h = ch.hash_data(path, "MD5", "b64", True)
+                fp = os.path.join(secpath, h)
+
+                # Remove key
+                if os.path.exists(f"{fp}.key"):
+                    os.remove(f"{fp}.key")
+
+                # Remove nonce
+                if os.path.exists(f"{fp}.nonce"):
+                    os.remove(f"{fp}.nonce")
+            sys.exit( f"{e}")
 
         named_temp.close()  # close (and delete) the reversion file
         Console.ok(f"Success: encrypted {counter} expressions")
         return counter
 
-    def decrypt(self):
+    def decrypt(self, ask_pass = True):
         """
         Decrypts all secrets within the config file
 
@@ -771,11 +784,11 @@ class Config(object):
         revertfd.close()  # close the data fd used to backup reversion file
 
         # Secinit variables: location where keys are stored
-        gcm_path = path_expand(config['cloudmesh.security.secpath'])
+        secpath = path_expand(config['cloudmesh.security.secpath'])
 
         # Load the private key
         kp = config['cloudmesh.security.privatekey']
-        prv = kh.load_key(kp, "PRIV", "PEM", True)
+        prv = kh.load_key(kp, "PRIV", "PEM", ask_pass)
 
         try:
             paths = self.get_list_secrets()
@@ -783,7 +796,7 @@ class Config(object):
                 # hash the path to find the file name
                 # MD5 is acceptable, attacker gains nothing by knowing path
                 h = ch.hash_data(path, "MD5", "b64", True)
-                fp = f"{gcm_path}/{h}"
+                fp = os.path.join(secpath, h) 
                 if not os.path.exists(f"{fp}.key"):
                     Console.ok(f"\tAlready plaintext: {path}")
                 else:
@@ -817,13 +830,13 @@ class Config(object):
                     config.set(path, pt)
         except Exception as e:
             Console.error("reverting cloudmesh.yaml")
-            copy2(src=named_temp.name, dst=config.config_path)
-            named_temp.close()  # close (and delete) the reversion file
-            raise e
+            copy2(src = named_temp.name, dst = config.config_path)
+            named_temp.close() #close (and delete) the reversion file
+            sys.exit( f"{e}")
 
         for path in paths:
             h = ch.hash_data(path, "MD5", "b64", True)
-            fp = f"{gcm_path}/{h}"
+            fp = os.path.join(secpath, h)
             os.remove(f"{fp}.key")
             os.remove(f"{fp}.nonce")
 
@@ -845,8 +858,7 @@ class Config(object):
             paths = list(filter(r.match, keys))
 
             # Prune the paths using cloudmesh.security.exceptions expressions
-            # Note: cloudmesh.version and cloudmesh.security.* should be
-            # listed they are necessary for encryption and decryption
+            # Note: cloudmesh.security.* should be matched its vital for enc/dec
             for pe in prnexps:
                 prn = re.compile(pe)
                 paths = list(filter(lambda i: not prn.match(i), paths))
