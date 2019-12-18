@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_config.py
 # pytest -v  tests/test_config.py
-# pytest -v --capture=no  tests/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no  tests/test_config.py:Test_config.<METHODNAME>
 ###############################################################
 import six
 
