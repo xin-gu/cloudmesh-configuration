@@ -96,6 +96,22 @@ class Config(object):
             "client_x509_cert_url"
         ]
 
+    @staticmethod
+    def exceptions():
+        return [
+            "cloudmesh.version",
+            "cloudmesh.security.publickey",
+            "cloudmesh.security.privatekey",
+            "cloudmesh.security.secpath",
+            "cloudmesh.security.secrets",
+            "cloudmesh.security.exceptions",
+            "cloudmesh.data.mongo.MONGO_PORT",
+            "cloudmesh.data.mongo.MONGO_HOST",
+            "cloudmesh.data.mongo.LOCAL",
+            "cloudmesh.data.mongo.MODE",
+            "cloudmesh.data.mongo.MONGO_DBNAME"
+        ]
+
     def fetch(self,
               url=None,
               destination=None):
@@ -866,19 +882,58 @@ class Config(object):
     def get_list_secrets(self):
         ret_list = []
         config = Config()
+
+        # Retrieve the default secrets
+        secexps = config.secrets()
+
+        # Convert the defaults to regexps
+        for i, e in enumerate(secexps):
+            ne = ".*" + e + ".*"
+            secexps[i] = ne
+
         # Get the regular expressions from config file
-        secexps = config['cloudmesh.security.secrets']
-        prnexps = config['cloudmesh.security.exceptions']
+        usrexps = config['cloudmesh.security.secrets']
+
+        # Append the defaults to the user define regular expressions
+        for e in usrexps:
+            secexps.append(e)
+
+        # Get the cloudmesh defined regexps that prune the encryption list
+        prnexps = config.exceptions()
+
+        # Collect user defined list of regexps that prune the encryption list
+        usrprn = config['cloudmesh.security.exceptions']
+        for p in usrprn:
+            prnexps.append(p)
+
+        # Flatten the config data to get the dot path to all attributes
         flat_conf = flatten(config.data, sep='.')
         keys = flat_conf.keys()
-        for e in secexps:  # for each expression in section
-            r = re.compile(e)
-            paths = list(filter(r.match, keys))
+
+        # for each of the expressions to encrypt the file
+        for e in secexps:
+            try: # Attempt to compile the secrets regexps
+                r = re.compile(e)
+                paths = list(filter(r.match, keys))
+            except re.error as ex:
+                Console.error(f"Invalid regexp {e}")
+                sys.exit()
+            except Exception as ex:
+                Console.error(str(ex))
+                sys.exit()
 
             # Prune the paths using cloudmesh.security.exceptions expressions
             # Note: cloudmesh.security.* should be matched its vital for enc/dec
             for pe in prnexps:
-                prn = re.compile(pe)
-                paths = list(filter(lambda i: not prn.match(i), paths))
+                try: # Attempt to compile the exceptions regexps
+                    prn = re.compile(pe)
+                    paths = list(filter(lambda i: not prn.match(i), paths))
+                except re.error as ex:
+                    Console.error(f"Invalid regexp {e}")
+                    sys.exit()
+                except Exception as ex:
+                    Console.error(str(ex))
+                    sys.exit()
+
             ret_list = ret_list + paths
         return list(set(ret_list))

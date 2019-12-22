@@ -12,12 +12,8 @@ cloudmesh:
     publickey: ~/.ssh/id_rsa.pub
     privatekey: ~/.ssh/id_rsa
     secpath: ~/.cloudmesh/security
-    secrets:
-    - .*
-    exceptions:
-    - cloudmesh.version
-    - cloudmesh.security.*
-    - cloudmesh.data.mongo.(MONGO_PORT|MONGO_HOST|LOCAL|MODE|MONGO_DBNAME)
+    secrets: []
+    exceptions: []
   iu:
     user: TBD
   default:
