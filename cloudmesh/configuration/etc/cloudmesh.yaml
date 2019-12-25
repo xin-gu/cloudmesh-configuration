@@ -386,7 +386,7 @@ cloudmesh:
         heading: Jetstream
         host: http://jetstream-cloud.org/
         label: jetstream
-        kind: opensatck
+        kind: openstack
         version: kilo
         service: compute
       credentials:
