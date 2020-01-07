@@ -404,7 +404,7 @@ cloudmesh:
       default:
         size: m1.small
         image: Ubuntu-Server-14.04-LTS
-    cybera-e:
+    cybera:
       cm:
         active: false
         heading: Cybera Edmonton OpenStack

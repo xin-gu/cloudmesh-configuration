@@ -630,7 +630,7 @@ class Config(object):
             print(e)
             sys.exit(1)
 
-    def search(self, key, value):
+    def search(self, key, value=None):
         """
         search("cloudmesh.cloud.*.cm.active", True)
         :param key:
