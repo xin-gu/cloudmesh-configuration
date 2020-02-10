@@ -365,17 +365,17 @@ cloudmesh:
         version: liberty
         service: compute
       credentials:
-        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0
-        OS_USERNAME: TBD
-        OS_PASSWORD: TBD
-        OS_TENANT_NAME: CH-819337
-        OS_TENANT_ID: CH-819337
-        OS_PROJECT_NAME: CH-819337
-        OS_PROJECT_DOMAIN_ID: default
-        OS_USER_DOMAIN_ID: default
-        OS_VERSION: kilo
-        OS_REGION_NAME: RegionOne
-        OS_KEY_PATH: ~/.ssh/id_rsa.pub
+        auth:
+          username: TBD
+          password: TBD
+          auth_url: "https://kvm.tacc.chameleoncloud.org:5000/v3"
+          project_id: 36198064bc7e4b33b02d5ee59ff75017
+          project_name: cloudmesh
+          user_domain_name: "Default"
+        region_name: "KVM@TACC"
+        interface: "public"
+        identity_api_version: "3"
+        key_path: ~/.ssh/id_rsa.pub
       default:
         size: m1.medium
         image: CC-Ubuntu18.04
