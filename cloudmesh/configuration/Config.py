@@ -93,7 +93,9 @@ class Config(object):
             "private_key_id",
             "private_key",
             "client_id",
-            "client_x509_cert_url"
+            "client_x509_cert_url",
+            "auth__password",
+            "auth.password"
         ]
 
     @staticmethod
