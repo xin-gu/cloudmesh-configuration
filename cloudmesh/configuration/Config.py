@@ -30,6 +30,40 @@ from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, \
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
 
 
+
+class Location:
+    _shared_state = None
+
+    def __init__(self, directory="~/.cloudmesh"):
+        if not Location._shared_state:
+            self.key = "CLOUDMESH_CONFIG_DIR"
+
+            Location._shared_state = self.__dict__
+            directory = path_expand(directory)
+            self.directory = os.environ.get(self.key) or directory
+        else:
+            self.__dict__ = Location._shared_state
+
+    def get(self):
+        return self.directory
+
+    def set(self, directory):
+        self.directory = path_expand(directory)
+
+    def environment(self, key):
+        if key in os.environ:
+            value = os.environ[key]
+            self.set(value)
+        else:
+            Console.error(f"Config location: could not find {key}")
+            return None
+
+    def __str__(self):
+        return self.directory
+
+    def __eq__(self, other):
+        return self.directory == other
+
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
 class Active(object):
