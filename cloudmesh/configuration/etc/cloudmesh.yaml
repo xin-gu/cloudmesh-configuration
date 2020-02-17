@@ -320,6 +320,7 @@ cloudmesh:
         size: m1.medium
         image: CC-Ubuntu18.04
         username: cc
+        network: e01ee12e-fd22-4b21-a050-d3e015f42bb1
     jetstream:
       cm:
         active: true
