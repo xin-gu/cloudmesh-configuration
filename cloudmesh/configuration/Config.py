@@ -28,8 +28,11 @@ from cloudmesh.common.FlatDict import FlatDict
 from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, \
     CmsHasher
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
+from pathlib import Path
 
-
+#
+# we sould freeze the cloudmesh.yaml name and just make dir changable
+#
 
 class Location:
     _shared_state = None
@@ -49,6 +52,10 @@ class Location:
 
     def set(self, directory):
         self.directory = path_expand(directory)
+
+    def config(self):
+        p = Path(self.directory) / "cloudmesh.yaml"
+        return p
 
     def environment(self, key):
         if key in os.environ:
@@ -85,7 +92,8 @@ class Active(object):
 class Config(object):
     __shared_state = {}
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh.yaml',
+    def __init__(self,
+                 config_path='~/.cloudmesh/cloudmesh.yaml',
                  encrypted=False):
         """
         Initialize the Config class.
@@ -97,7 +105,17 @@ class Config(object):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
-            self.load(config_path=config_path)
+
+            if ".yaml" in config_path:
+                p = os.path.dirname(config_path)
+            else:
+                p = config_path
+
+            self.location = Location(directory=p)
+
+            self.load(config_path=self.location.config())
+
+            # self.load(config_path=config_path)
             try:
                 self.user = self["cloudmesh.profile.user"]
             except:
