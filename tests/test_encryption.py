@@ -1,7 +1,7 @@
 #########################################################################
 # pytest -v --capture=no tests/test_encryption.py
 # pytest -v  tests/test_encryption.py
-# pytest -v --capture=no  tests/test_encryption.py:Test_name.<METHODNAME>
+# pytest -v --capture=no  tests/test_encryption..py::Test_name::<METHODNAME>
 #########################################################################
 """ run with
 
