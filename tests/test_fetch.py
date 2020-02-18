@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_fetch.py
 # pytest -v  tests/1_local/test_fetch.py
-# pytest -v --capture=no  tests/1_local/test_fetch.py:Test_fetch.<METHODNAME>
+# pytest -v --capture=no  tests/1_local/test_fetch..py::Test_fetch::<METHODNAME>
 ###############################################################
 import six
 
