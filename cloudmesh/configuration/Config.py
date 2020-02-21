@@ -314,7 +314,7 @@ class Config(object):
         error = Config.check_for_tabs(path)
 
         if not error:
-            Console.ok("No TABs found")
+            Console.ok("OK. No TABs found")
 
         banner("yamllint")
 
@@ -331,7 +331,7 @@ class Config(object):
                 print(" line:column  description")
                 print()
             else:
-                Console.ok("No issues found")
+                Console.ok("OK. No issues found")
                 print()
         except:
             Console.error("Could not execute yamllint. Please add with")
