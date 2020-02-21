@@ -289,9 +289,27 @@ class Config(object):
         error = False
         path = path_expand(path)
 
-        banner("Check for Version")
-
         config = Config()
+
+        banner("Check for CLOUDMESH_CONFIG_DIR")
+
+        if os.path.isfile(path):
+            print("Config found in:", path)
+        if "CLOUDMESH_CONFIG_DIR" in os.environ:
+            directory = os.environ("CLOUDMESH_CONFIG_DIR")
+            print("CLOUDMESH_CONFIG_DIR={directory}")
+            config_path = str(Path(directory) / "cloudmesh.yaml")
+            if os.path.isfile(path):
+                print("Config found in:", path)
+            else:
+                Console.error(f"File {config_path} not found.")
+            if path != config_path:
+                Console.warning("You may have two cloudmesh.yaml file.")
+                Console.warning("We use: {config_path is use}")
+
+
+        banner("Check Version")
+
 
         dist_version = config.version()
         yaml_version = config["cloudmesh.version"]
