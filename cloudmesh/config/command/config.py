@@ -267,11 +267,24 @@ class ConfigCommand(PluginCommand):
             Config.check()
 
         elif arguments.encrypt:
-            config = Config()
+
+            try:
+                from cloudmesh.encrypt.Config import Config as EncryptConfig
+            except:
+                Console.error("Make sure cloudmesh-encryption is installed")
+                return ""
+
+            config = EncryptConfig()
             config.encrypt()
 
         elif arguments.decrypt:
-            config = Config()
+            try:
+                from cloudmesh.encrypt.Config import Config as EncryptConfig
+            except:
+                Console.error("Make sure cloudmesh-encryption is installed")
+                return ""
+
+            config = EncryptConfig()
             config.decrypt(ask_pass=not arguments.nopass)
 
         elif arguments.set:
