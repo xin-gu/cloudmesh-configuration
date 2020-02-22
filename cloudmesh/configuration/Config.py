@@ -22,7 +22,6 @@ from cloudmesh.common.util import writefile
 from cloudmesh.common.variables import Variables
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
 
-
 #
 # we sould freeze the cloudmesh.yaml name and just make dir changable
 #
