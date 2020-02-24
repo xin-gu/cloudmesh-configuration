@@ -385,7 +385,7 @@ class Config(object):
                     line_no += 1
         return file_contains_tabs
 
-    def save(self, path="~/.cloudmesh/cloudmesh.yaml", backup=True):
+    def save(self, path=None, backup=True):
         """
         #
         # not tested
@@ -399,7 +399,7 @@ class Config(object):
         :return:
         :rtype:
         """
-        path = path_expand(path)
+        path = path_expand(path or self.location.config())
         if backup:
             destination = backup_name(path)
             shutil.copyfile(path, destination)
