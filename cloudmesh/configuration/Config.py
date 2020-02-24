@@ -193,7 +193,7 @@ class Config(object):
 
         writefile(destination, content)
 
-    def load(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
+    def load(self, config_path=None):
         """
         loads a configuration file
         :param config_path:
@@ -204,7 +204,8 @@ class Config(object):
 
         # VERBOSE("Load config")
 
-        self.config_path = str(Path(path_expand(config_path)).resolve())
+        self.config_path = Path(path_expand(config_path or self.location.config())).resolve()
+
         self.config_folder = dirname(self.config_path)
 
         self.create(config_path=config_path)
@@ -242,7 +243,7 @@ class Config(object):
         else:
             self.cloud = None
 
-    def create(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
+    def create(self, config_path=None):
         """
         creates the cloudmesh.yaml file in the specified location. The
         default is
@@ -255,7 +256,7 @@ class Config(object):
         :param config_path:  The yaml file to create
         :type config_path: string
         """
-        self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_path = Path(path_expand(config_path or self.location.config())).resolve()
 
         self.config_folder = dirname(self.config_path)
 
@@ -283,12 +284,21 @@ class Config(object):
                 print("set {key}={value}".format(**locals()))
                 d[key] = defaults[key]
 
-    @staticmethod
-    def check(path="~/.cloudmesh/cloudmesh.yaml"):
+    #
+    # bug make check a instance method
+    #
+
+    def check(self, path=None):
+        # bug: path not needed
 
         error = False
-        path = path_expand(path)
+        # path = path_expand(path or self.location.config())
 
+        path = path_expand(path or self.location.config())
+
+        #
+        # bug path not passed along ;-) we can just remove it
+        #
         config = Config()
 
         banner("Check for CLOUDMESH_CONFIG_DIR")
