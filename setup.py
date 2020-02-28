@@ -38,7 +38,7 @@ munch
 requests
 oyaml
 cryptography
-""".split("\n")
+""".splitlines()
 
 version = readfile("VERSION").strip()
 
