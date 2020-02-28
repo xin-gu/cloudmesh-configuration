@@ -352,7 +352,7 @@ class Config(object):
         file_contains_tabs = False
 
         with open(filename, 'r') as f:
-            lines = f.read().split("\n")
+            lines = f.read().splitlines()
 
         line_no = 1
         for line in lines:
@@ -461,7 +461,7 @@ class Config(object):
                  color=None):
         kluge = yaml.dump(d,
                           default_flow_style=False, indent=2)
-        content = kluge.split("\n")
+        content = kluge.splitlines()
 
         return Config.cat_lines(content, mask_secrets=mask_secrets)
 
@@ -512,7 +512,7 @@ class Config(object):
 
         _path = path_expand("~/.cloudmesh/cloudmesh.yaml")
         with open(_path) as f:
-            content = f.read().split("\n")
+            content = f.read().splitlines()
         return Config.cat_lines(content,
                                 mask_secrets=mask_secrets,
                                 attributes=None, color=None)
