@@ -5,7 +5,10 @@ cloudmesh-common
 #
 #    pip-compile setup.py
 #
+<<<<<<< HEAD
 munch==2.3.2
 oyaml==0.9
 pathlib==1.0.1
 requests==2.22.0
+=======
+>>>>>>> master
