@@ -37,7 +37,7 @@ pathlib
 munch
 requests
 oyaml
-cryptography
+cryptography --no-binary
 """.splitlines()
 
 version = readfile("VERSION").strip()
