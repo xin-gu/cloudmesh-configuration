@@ -39,8 +39,6 @@ requests
 oyaml
 """.splitlines()
 
-# cryptography
-
 
 version = readfile("VERSION").strip()
 
