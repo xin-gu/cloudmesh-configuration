@@ -1,25 +1,41 @@
-dist: bionic
+os:
+  - linux
+
+arch: arm64
 
 sudo: required
 
+python:
+  - "3.8.2"
+
+cache: false
+
+dist: bionic
+
 language: python
 
-python:
-  - "3.7"
-  - "3.8"
-#  - "3.8-dev"  # 3.8 development branch
-#  - "nightly"  # nightly build
+services:
+  - docker
+
+before_install:
+  - sudo apt-get install build-essential libssl-dev libffi-dev
+  - sudo apt-get install python3-tk
+  - python --version
+  - python -m venv ~/ENV3
+  - source ~/ENV3/bin/activate
+  - pip install pip -U
+  - pip --version
+  - which python
+  - which pip
+  - pwd
 
 install:
-  - python --version
-  - pwd
-  - pip install -r requirements.txt
-  - pip install .
-  - mkdir ~/.cloudmesh
-  - cp cloudmesh/configuration/etc/cloudmesh.yaml ~/.cloudmesh
+  - sudo pip install cryptography --no-binary cryptography
+  - sudo pip install -r requirements.txt
+  - sudo pip install -r requirements-dev.txt
+  - sudo pip install .
 
 script:
+  - mkdir ~/.cloudmesh
+  - cp cloudmesh/configuration/etc/cloudmesh.yaml ~/.cloudmesh
   - pytest -v --capture=no tests/test_config.py
-
-# remove the verbose test as it does not work in python 2.7
-#  - pytest -v tests/test_verbose.py
