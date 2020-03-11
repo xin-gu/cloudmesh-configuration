@@ -43,7 +43,7 @@ requiers_cloudmesh = """
 cloudmesh-common
 """.splitlines()
 
-if  "PRODUCTION" not in os.environ:
+if "TESTING" not in os.environ:
     requiers = requiers + requiers_cloudmesh
 
 
