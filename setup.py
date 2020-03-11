@@ -18,7 +18,7 @@
 import io
 
 from setuptools import find_packages, setup
-
+import os
 
 def readfile(filename):
     with io.open(filename, encoding="utf-8") as stream:
@@ -38,6 +38,14 @@ munch
 requests
 oyaml
 """.splitlines()
+
+requiers_cloudmesh = """
+cloudmesh-common
+""".splitlines()
+
+if  "PRODUCTION" not in os.environ:
+    requiers = requiers + requiers_cloudmesh
+
 
 
 version = readfile("VERSION").strip()
