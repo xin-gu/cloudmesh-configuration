@@ -143,6 +143,7 @@ class Config(object):
             "private_key_id",
             "private_key",
             "client_id",
+            "client_email",
             "client_x509_cert_url",
             "auth__password",
             "auth.password"
@@ -201,7 +202,6 @@ class Config(object):
         """
 
         # VERBOSE("Load config")
-
         self.config_path = Path(path_expand(config_path or self.location.config())).resolve()
 
         self.config_folder = dirname(self.config_path)
@@ -213,6 +213,7 @@ class Config(object):
             # content = path_expand(content)
             content = self.spec_replace(content)
             self.data = yaml.load(content, Loader=yaml.SafeLoader)
+
 
         # print (self.data["cloudmesh"].keys())
 
@@ -229,6 +230,7 @@ class Config(object):
         #
 
         self.variable_database = Variables(filename="~/.cloudmesh/var-data")
+
         self.set_debug_defaults()
 
         default = self.default()
@@ -236,6 +238,7 @@ class Config(object):
         for name in self.default():
             if name not in self.variable_database:
                 self.variable_database[name] = default[name]
+
         if "cloud" in default:
             self.cloud = default["cloud"]
         else:
