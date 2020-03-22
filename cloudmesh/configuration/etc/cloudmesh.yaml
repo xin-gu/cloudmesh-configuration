@@ -179,7 +179,7 @@ cloudmesh:
         auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
         client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/TBD%40imposing-coast-257700.iam.gserviceaccount.com
   volume:
-    aws1:
+    aws-2:
       cm:
         active: true
         heading: AWS
