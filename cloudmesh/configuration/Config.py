@@ -224,7 +224,7 @@ class Config(object):
         # populate default variables
         #
 
-        self.variable_database = Variables(filename="~/.cloudmesh/cms burn")
+        self.variable_database = Variables(filename="~/.cloudmesh/variable.dat")
 
         self.set_debug_defaults()
 
