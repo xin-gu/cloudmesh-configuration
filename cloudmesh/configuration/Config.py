@@ -1,18 +1,16 @@
-import munch
 import os
-import oyaml as yaml
 import re
-import requests
-import sys
 import shutil
-import tempfile
-
-from base64 import b64encode, b64decode
+import sys
 from os import mkdir
 from os.path import isfile, realpath, exists, dirname
 from pathlib import Path
-from shutil import copyfile, copy2
+from shutil import copyfile
 
+import munch
+import oyaml as yaml
+import requests
+from cloudmesh.common.FlatDict import FlatDict
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
@@ -20,13 +18,10 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import backup_name
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.common.util import readfile
 from cloudmesh.common.util import writefile
-from cloudmesh.common.util import writefd
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.FlatDict import FlatDict
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
-from pathlib import Path
+
 
 #
 # we sould freeze the cloudmesh.yaml name and just make dir changable
@@ -229,7 +224,7 @@ class Config(object):
         # populate default variables
         #
 
-        self.variable_database = Variables(filename="~/.cloudmesh/var-data")
+        self.variable_database = Variables(filename="~/.cloudmesh/cms burn")
 
         self.set_debug_defaults()
 
