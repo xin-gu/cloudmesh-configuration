@@ -94,6 +94,7 @@ setup(
         "Operating System :: Unix",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Internet",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development :: Libraries",
