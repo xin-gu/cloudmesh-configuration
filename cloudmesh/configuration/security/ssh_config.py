@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
     hosts = ssh_config()
 
-    user = Config("cloudmesh.yaml")["cloudmesh.profile.user"]
+    user = Config()["cloudmesh.profile.user"]
 
     print("User:", user)
 

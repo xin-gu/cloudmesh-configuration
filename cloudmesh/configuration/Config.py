@@ -21,55 +21,14 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import writefile
 from cloudmesh.common.variables import Variables
 from cloudmesh.configuration import __version__ as cloudmesh_yaml_version
-
-
-#
-# we sould freeze the cloudmesh.yaml name and just make dir changable
-#
-
-class Location:
-    _shared_state = None
-
-    def __init__(self, directory="~/.cloudmesh"):
-        if not Location._shared_state:
-            self.key = "CLOUDMESH_CONFIG_DIR"
-
-            Location._shared_state = self.__dict__
-            directory = path_expand(directory)
-            self.directory = os.environ.get(self.key) or directory
-        else:
-            self.__dict__ = Location._shared_state
-
-    def get(self):
-        return self.directory
-
-    def set(self, directory):
-        self.directory = path_expand(directory)
-
-    def config(self):
-        p = Path(self.directory) / "cloudmesh.yaml"
-        return p
-
-    def environment(self, key):
-        if key in os.environ:
-            value = os.environ[key]
-            self.set(value)
-        else:
-            Console.error(f"Config location: could not find {key}")
-            return None
-
-    def __str__(self):
-        return self.directory
-
-    def __eq__(self, other):
-        return self.directory == other
+from cloudmesh.common.location import Location
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
 class Active(object):
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
-        self.config = Config(config_path=config_path)
+    def __init__(self):
+        self.config = Config()
 
     def clouds(self):
         names = []
