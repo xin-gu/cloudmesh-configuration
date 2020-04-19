@@ -139,7 +139,7 @@ cloudmesh:
         version: TBD
         service: storage
       default:
-        resource_group: cloudmesh
+        group: cloudmesh
         location: TBD
       credentials:
         account_name: TBD
@@ -265,7 +265,7 @@ cloudmesh:
       default:
         image: Canonical:UbuntuServer:16.04.0-LTS:latest
         size: Basic_A0
-        resource_group: cloudmesh
+        group: cloudmesh
         storage_account: cmdrive
         network: cmnetwork
         subnet: cmsubnet
