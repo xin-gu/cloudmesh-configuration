@@ -210,7 +210,7 @@ cloudmesh:
           version: TBD
           service: volume
         default:
-          path: {path}
+          path: TBD
     aws-2:
       cm:
         active: true
